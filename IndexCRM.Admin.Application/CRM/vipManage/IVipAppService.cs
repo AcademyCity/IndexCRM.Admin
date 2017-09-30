@@ -12,5 +12,7 @@ namespace IndexCRM.Admin.CRM.vipManage
 
         Task<FileDto> GetVipListToExcel();
 
+        Task OcDisableVip(EntityDto<string> input);
+
     }
 }

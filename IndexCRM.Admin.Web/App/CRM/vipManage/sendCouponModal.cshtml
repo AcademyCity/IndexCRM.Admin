@@ -1,0 +1,25 @@
+﻿<div>
+    <form name="sendCouponForm" role="form" novalidate class="form-validation">
+        <div class="modal-header">
+            <h4 class="modal-title">
+                <span>赠送优惠券_{{vm.vipName}}</span>
+            </h4>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group form-md-line-input form-md-floating-label has-info">
+                        <select name="orderStatusCombobox" class="form-control ng-pristine ng-untouched ng-valid ng-empty edited" ng-options="item.id as item.couponName for item in vm.couponConfigList" ng-model="vm.couponConfigList[0].id">
+                        </select>
+                        <label>请选择优惠券</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button ng-disabled="vm.saving" type="button" class="btn btn-default" ng-click="vm.cancel()">@L("Cancel")</button>
+            <button type="submit" button-busy="vm.saving" busy-text="提交中..." class="btn btn-primary blue" ng-click="vm.save()" ng-disabled="sendCouponForm.$invalid"><i class="fa fa-save"></i> <span>确 认</span></button>
+        </div>
+    </form>
+</div>

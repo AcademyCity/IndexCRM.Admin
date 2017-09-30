@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data.Entity;
-using System.Diagnostics;
 using System.Linq;
 using System.Linq.Dynamic;
 using System.Threading.Tasks;
@@ -10,25 +8,12 @@ using Abp.Authorization;
 using Abp.Authorization.Roles;
 using Abp.Authorization.Users;
 using Abp.AutoMapper;
-using Abp.Configuration;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.Linq.Extensions;
-using Abp.Notifications;
-using Abp.Runtime.Session;
-using Abp.UI;
-using Abp.Zero.Configuration;
 using IndexCRM.Admin.Authorization;
-using Microsoft.AspNet.Identity;
-using IndexCRM.Admin.Authorization.Permissions;
-using IndexCRM.Admin.Authorization.Permissions.Dto;
 using IndexCRM.Admin.Authorization.Roles;
-using IndexCRM.Admin.Authorization.Users;
-using IndexCRM.Admin.Authorization.Users.Exporting;
-using IndexCRM.Admin.CRM.vipManage;
 using IndexCRM.Admin.Dto;
-using IndexCRM.Admin.Features;
-using IndexCRM.Admin.Notifications;
 using IndexCRM.Admin.CRM.vipManage.Dto;
 using IndexCRM.Admin.CRM.vipManage.Exporting;
 
@@ -44,8 +29,8 @@ namespace IndexCRM.Admin.CRM.vipManage
         private readonly IRepository<UserPermissionSetting, long> _userPermissionRepository;
         private readonly IRepository<UserRole, long> _userRoleRepository;
 
-        private readonly IRepository<Vip, string> _vip;
-        private readonly IRepository<Point, string> _point;
+        private readonly IRepository<Vip, string> _vipRepository;
+        private readonly IRepository<Point, string> _pointRepository;
 
         public VipAppService(
             RoleManager roleManager,
@@ -53,22 +38,22 @@ namespace IndexCRM.Admin.CRM.vipManage
             IRepository<RolePermissionSetting, long> rolePermissionRepository,
             IRepository<UserPermissionSetting, long> userPermissionRepository,
             IRepository<UserRole, long> userRoleRepository,
-            IRepository<Vip, string> vip,
-            IRepository<Point, string> point)
+            IRepository<Vip, string> vipRepository,
+            IRepository<Point, string> pointRepository)
         {
             _roleManager = roleManager;
             _vipListExcelExporter = vipListExcelExporter;
             _rolePermissionRepository = rolePermissionRepository;
             _userPermissionRepository = userPermissionRepository;
             _userRoleRepository = userRoleRepository;
-            _vip = vip;
-            _point = point;
+            _vipRepository = vipRepository;
+            _pointRepository = pointRepository;
         }
 
         [AbpAuthorize(AppPermissions.CRM_VipManage)]
         public async Task<PagedResultDto<VipListDto>> GetVipList(GetVipInput input)
         {
-            var vip = _vip.GetAll()
+            var vip = _vipRepository.GetAll()
                 .WhereIf(!input.Filter.IsNullOrWhiteSpace(),
                     u =>
                         u.VipCode.Contains(input.Filter) ||
@@ -76,7 +61,7 @@ namespace IndexCRM.Admin.CRM.vipManage
                 );
 
             var query = from v in vip
-                        join p in _point.GetAll() on v.Id equals p.VipId
+                        join p in _pointRepository.GetAll() on v.Id equals p.VipId
                         select new
                         {
                             v,
@@ -114,6 +99,20 @@ namespace IndexCRM.Admin.CRM.vipManage
             var vipListDtos = users.MapTo<List<VipListDto>>();
 
             return _vipListExcelExporter.ExportToFile(vipListDtos);
+        }
+
+        public async Task OcDisableVip(EntityDto<string> input)
+        {
+            var user = _vipRepository.FirstOrDefault(a => a.Id == input.Id);
+            if (user.Status=="1")
+            {
+                user.Status = "2";
+            }
+            else
+            {
+                user.Status = "1";
+            }
+            _vipRepository.Update(user);
         }
     }
 }

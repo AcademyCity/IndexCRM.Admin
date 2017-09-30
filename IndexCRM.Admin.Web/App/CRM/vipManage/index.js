@@ -33,6 +33,7 @@
                 paginationPageSize: app.consts.grid.defaultPageSize,
                 useExternalPagination: true,
                 useExternalSorting: true,
+                enableSorting: false,
                 appScopeProvider: vm,
                 rowTemplate: '<div ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell" ng-class="{ \'ui-grid-row-header-cell\': col.isRowHeader, \'text-muted\': !row.entity.isActive }"  ui-grid-cell></div>',
                 columnDefs: [
@@ -45,9 +46,12 @@
                             '  <div class="btn-group dropdown" uib-dropdown="" dropdown-append-to-body>' +
                             '    <button class="btn btn-xs btn-primary blue" uib-dropdown-toggle="" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog"></i> ' + app.localize('Actions') + ' <span class="caret"></span></button>' +
                             '    <ul uib-dropdown-menu>' +
-                            '      <li><a ng-click="grid.appScope.editUser(row.entity)">' + app.localize('Edit') + '</a></li>' +
-                            '      <li><a ng-click="grid.appScope.editPermissions(row.entity)">' + app.localize('Permissions') + '</a></li>' +
-                            '      <li><a ng-click="grid.appScope.deleteUser(row.entity)">' + app.localize('Delete') + '</a></li>' +
+                            '      <li ng-show="row.entity.status==1"><a ng-click="grid.appScope.ocDisableVip(row.entity)">冻结</a></li>' +
+                            '      <li ng-show="row.entity.status==2"><a ng-click="grid.appScope.ocDisableVip(row.entity)">解冻</a></li>' +
+                            '      <li ><a ng-click="grid.appScope.changePoint(row.entity)">修改积分</a></li>' +
+                            '      <li ><a ng-click="grid.appScope.showVipPointRecord(row.entity)">积分记录</a></li>' +
+                            '      <li ><a ng-click="grid.appScope.sendCoupon(row.entity)">赠送优惠券</a></li>' +
+
                             '    </ul>' +
                             '  </div>' +
                             '</div>'
@@ -67,8 +71,8 @@
                         field: 'vipSex',
                         cellTemplate:
                             '<div class=\"ui-grid-cell-contents\">' +
-                            '  <span ng-show="row.entity.vipSex==0" class="label label-success">女</span>' +
-                            '  <span ng-show="row.entity.vipSex==1" class="label label-info">男</span>' +
+                            '  <span ng-show="row.entity.vipSex==0">女</span>' +
+                            '  <span ng-show="row.entity.vipSex==1">男</span>' +
                             '</div>',
                         minWidth: 40
                     },
@@ -94,7 +98,7 @@
                             '<div class=\"ui-grid-cell-contents\">' +
                             '  <span ng-show="row.entity.status==0" class="label label-default">未激活</span>' +
                             '  <span ng-show="row.entity.status==1" class="label label-success">使用中</span>' +
-                            '  <span ng-show="row.entity.status==2" class="label label-danger">禁用中</span>' +
+                            '  <span ng-show="row.entity.status==2" class="label label-danger">冻结中</span>' +
                             '</div>',
                         minWidth: 40
                     },
@@ -142,6 +146,75 @@
                 }
                 return users;
             }
+
+            vm.ocDisableVip = function (vip) {
+                vipService.ocDisableVip({
+                    id: vip.id
+                }).then(function (result) {
+                    vm.getVipList();
+                    abp.notify.success("操作成功！");
+                });
+            }
+
+            vm.changePoint = function (vip) {
+                var modalInstance = $uibModal.open({
+                    templateUrl: '~/App/CRM/vipManage/changePointModal.cshtml',
+                    controller: 'crm.vipManage.changePointModal as vm',
+                    backdrop: 'static',
+                    resolve: {
+                        vipInfo: function () {
+                            return {
+                                vipId: vip.id,
+                                vipName: vip.vipName,
+                                vipPoint: vip.vipPoint
+                            };
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function (result) {
+                    vm.getVipList();
+                });
+            }
+
+            vm.showVipPointRecord = function (vip) {
+                $uibModal.open({
+                    templateUrl: '~/App/CRM/vipManage/showVipPointRecordModal.cshtml',
+                    controller: 'crm.vipManage.showVipPointRecordModal as vm',
+                    backdrop: 'static',
+                    size: 'lg',
+                    resolve: {
+                        vipInfo: function () {
+                            return {
+                                vipId: vip.id,
+                                vipName: vip.vipName
+                            };
+                        }
+                    }
+                });
+            }
+
+            vm.sendCoupon = function (vip) {
+                var modalInstance = $uibModal.open({
+                    templateUrl: '~/App/CRM/vipManage/sendCouponModal.cshtml',
+                    controller: 'crm.vipManage.sendCouponModal as vm',
+                    backdrop: 'static',
+                    resolve: {
+                        vipInfo: function () {
+                            return {
+                                vipId: vip.id,
+                                vipName: vip.vipName,
+                                vipPoint: vip.vipPoint
+                            };
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function (result) {
+                    vm.getVipList();
+                });
+            }
+            
 
             vm.exportToExcel = function () {
                 vipService.getUsersToExcel({})

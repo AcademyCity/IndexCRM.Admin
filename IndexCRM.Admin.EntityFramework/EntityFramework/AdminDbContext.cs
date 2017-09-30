@@ -33,6 +33,10 @@ namespace IndexCRM.Admin.EntityFramework
         /*IndexCRM*/
         public virtual IDbSet<Vip> Vip { get; set; }
         public virtual IDbSet<Point> Point { get; set; }
+        public virtual IDbSet<PointRecord> PointRecord { get; set; }
+        public virtual IDbSet<Coupon> Coupon { get; set; }
+        public virtual IDbSet<CouponConfig> CouponConfig { get; set; }
+
 
         public AdminDbContext()
             : base("Default")

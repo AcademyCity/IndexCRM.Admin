@@ -172,7 +172,10 @@
     <Compile Include="Chat\NullChatCommunicator.cs" />
     <Compile Include="Configuration\AppSettingProvider.cs" />
     <Compile Include="Configuration\AppSettings.cs" />
+    <Compile Include="CRM\Coupon.cs" />
+    <Compile Include="CRM\CouponConfig.cs" />
     <Compile Include="CRM\Point.cs" />
+    <Compile Include="CRM\PointRecord.cs" />
     <Compile Include="CRM\Vip.cs" />
     <Compile Include="Debugging\DebugHelper.cs" />
     <Compile Include="Editions\EditionManager.cs" />

@@ -507,7 +507,10 @@
     <Content Include="App\common\views\_empty\modal.js" />
     <Content Include="App\common\views\_empty\index.js" />
     <Content Include="App\common\views\_empty\README.txt" />
+    <Content Include="App\CRM\vipManage\sendCouponModal.js" />
+    <Content Include="App\CRM\vipManage\showVipPointRecordModal.js" />
     <Content Include="App\CRM\vipManage\index.js" />
+    <Content Include="App\CRM\vipManage\changePointModal.js" />
     <Content Include="App\host\directives\featureTree.css">
       <DependentUpon>featureTree.less</DependentUpon>
     </Content>
@@ -2234,6 +2237,9 @@
     <Content Include="fonts\open-sans\open-sans-v14-greek_cyrillic-ext_cyrillic_latin_latin-ext_greek-ext_vietnamese-regular.woff" />
     <Content Include="fonts\open-sans\open-sans-v14-greek_cyrillic-ext_cyrillic_latin_latin-ext_greek-ext_vietnamese-regular.woff2" />
     <Content Include="App\CRM\vipManage\index.cshtml" />
+    <Content Include="App\CRM\vipManage\changePointModal.cshtml" />
+    <Content Include="App\CRM\vipManage\showVipPointRecordModal.cshtml" />
+    <Content Include="App\CRM\vipManage\sendCouponModal.cshtml" />
     <None Include="Properties\PublishProfiles\aspnetzero - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\xx.pubxml" />
     <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
