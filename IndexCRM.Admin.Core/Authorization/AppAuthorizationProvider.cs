@@ -84,6 +84,9 @@ namespace IndexCRM.Admin.Authorization
 
             var vipManage = pages.CreateChildPermission(AppPermissions.CRM_VipManage, L("VipManage"));
 
+            var couponManage = pages.CreateChildPermission(AppPermissions.CRM_CouponManage, L("CouponManage"));
+            
+
         }
 
         private static ILocalizableString L(string name)

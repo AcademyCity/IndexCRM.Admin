@@ -13,21 +13,29 @@
             vm.couponConfigList = null;
 
             vm.save = function () {
-                if (vm.amount == 0) {
-                    abp.notify.warn("修改数量不能为零");
+                if (vm.sendCouponId == "") {
+                    abp.notify.warn("请选择赠送优惠券！");
                     return;
                 }
                 vm.saving = true;
 
+                vm.sendCouponName = null;
+                for (var i = 0; i < vm.couponConfigList.length; i++) {
+                    if (vm.couponConfigList[i].id == vm.sendCouponId) {
+                        vm.sendCouponName = vm.couponConfigList[i].couponName;
+                        break;  // 循环被终止
+                    }
+                }
+
                 abp.message.confirm(
-                    abp.utils.formatString("修改会员积分\n\r\n\r会员昵称:{0}\n\r修改数量:{1}  ", vm.vipName, vm.amount),
+                    abp.utils.formatString("赠送优惠券\n\r\n\r会员昵称:{0}\n\r优惠券名称:{1}  ", vm.vipName, vm.sendCouponName),
                     function (isConfirmed) {
                         $timeout(function () {
                             if (isConfirmed) {
                                 vm.saving = true;
-                                pointService.changePoint({
+                                couponService.sendCoupon({
                                     vipId: vm.vipId,
-                                    amount: vm.amount,
+                                    couponConfigId: vm.sendCouponId,
                                     explain: vm.Explain
                                 }).then(function () {
                                     abp.notify.success("操作成功");
@@ -35,6 +43,8 @@
                                 }).finally(function () {
                                     vm.saving = false;
                                 });
+                            } else {
+                                vm.saving = false;
                             }
                         }, 200);
                     }
@@ -52,7 +62,7 @@
                     .then(function (result) {
                         vm.couponConfigList = result.data;
                         vm.couponConfigList.unshift({ id: "", couponName: "请选择" });
-                        console.log(vm.couponConfigList);
+                        vm.sendCouponId = vm.couponConfigList[0].id;
                     }).finally(function () {
                         vm.loading = false;
                     });

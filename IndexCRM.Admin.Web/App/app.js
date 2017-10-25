@@ -183,6 +183,14 @@ appModule.config([
             });
         }
 
+        if (abp.auth.hasPermission('CRM.CouponManage')) {
+            $stateProvider.state('couponManage', {
+                url: '/couponManage',
+                templateUrl: '~/App/CRM/couponManage/index.cshtml'
+            });
+        }
+        
+
         //$qProvider settings
         $qProvider.errorOnUnhandledRejections(false);
     }

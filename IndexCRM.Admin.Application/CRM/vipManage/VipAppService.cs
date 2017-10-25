@@ -56,8 +56,8 @@ namespace IndexCRM.Admin.CRM.vipManage
             var vip = _vipRepository.GetAll()
                 .WhereIf(!input.Filter.IsNullOrWhiteSpace(),
                     u =>
-                        u.VipCode.Contains(input.Filter) ||
-                        u.VipPhone.Contains(input.Filter)
+                        u.VipCode==input.Filter ||
+                        u.VipPhone==input.Filter
                 );
 
             var query = from v in vip

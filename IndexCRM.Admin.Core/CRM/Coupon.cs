@@ -13,7 +13,7 @@ namespace IndexCRM.Admin.CRM
     {
         [Column("CouponId")]
         [StringLength(40)]
-        public string Id { get; set; }
+        public override string Id { get; set; }
 
         [StringLength(40)]
         public string CouponConfigId { get; set; }

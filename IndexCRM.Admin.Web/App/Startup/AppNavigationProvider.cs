@@ -106,6 +106,13 @@ namespace IndexCRM.Admin.Web.App.Startup
                     icon: "icon-home",
                     requiredPermissionName: AppPermissions.CRM_VipManage
                     )
+                ).AddItem(new MenuItemDefinition(
+                    AppPermissions.CRM_CouponManage,
+                    L("CouponManage"),
+                    url: "couponManage",
+                    icon: "icon-home",
+                    requiredPermissionName: AppPermissions.CRM_CouponManage
+                    )
                 );
         }
 

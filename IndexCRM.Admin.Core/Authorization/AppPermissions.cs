@@ -62,5 +62,7 @@
         public const string Pages_Administration_Host_Settings = "Pages.Administration.Host.Settings";
 
         public const string CRM_VipManage = "CRM.VipManage";
+        public const string CRM_CouponManage = "CRM.CouponManage";
+        
     }
 }

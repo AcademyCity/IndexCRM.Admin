@@ -51,7 +51,7 @@
                             '      <li ><a ng-click="grid.appScope.changePoint(row.entity)">修改积分</a></li>' +
                             '      <li ><a ng-click="grid.appScope.showVipPointRecord(row.entity)">积分记录</a></li>' +
                             '      <li ><a ng-click="grid.appScope.sendCoupon(row.entity)">赠送优惠券</a></li>' +
-
+                            '      <li ><a ng-click="grid.appScope.showVipCoupon(row.entity)">查看优惠券</a></li>' +
                             '    </ul>' +
                             '  </div>' +
                             '</div>'
@@ -214,8 +214,24 @@
                     vm.getVipList();
                 });
             }
-            
 
+            vm.showVipCoupon = function (vip) {
+                $uibModal.open({
+                    templateUrl: '~/App/CRM/vipManage/showVipCouponModal.cshtml',
+                    controller: 'crm.vipManage.showVipCouponModal as vm',
+                    backdrop: 'static',
+                    size: 'lg',
+                    resolve: {
+                        vipInfo: function () {
+                            return {
+                                vipId: vip.id,
+                                vipName: vip.vipName
+                            };
+                        }
+                    }
+                });
+            }
+            
             vm.exportToExcel = function () {
                 vipService.getUsersToExcel({})
                     .then(function (result) {

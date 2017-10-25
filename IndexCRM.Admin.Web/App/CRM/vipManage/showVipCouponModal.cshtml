@@ -1,0 +1,20 @@
+﻿@using IndexCRM.Admin.Localization
+<div>
+    <form name="showVipCouponForm" role="form" novalidate class="form-validation">
+        <div class="modal-header">
+            <h4 class="modal-title">
+                <span>会员优惠券_{{vm.vipName}}</span>
+            </h4>
+        </div>
+        <div class="modal-body">
+            <div busy-if="vm.loading">
+                <div ui-grid="vm.vipPointRecordGridOptions" ui-grid-pagination ui-grid-resize-columns dir=@(CultureHelper.IsRtl ? "rtl" : "")></div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button ng-disabled="vm.saving" type="button" class="btn btn-default" ng-click="vm.cancel()">@L("Cancel")</button>
+            @*<button type="submit" button-busy="vm.saving" busy-text="提交中..." class="btn btn-primary blue" ng-click="vm.save()" ng-disabled="showVipPointRecordForm.$invalid"><i class="fa fa-save"></i> <span>确 认</span></button>*@
+        </div>
+    </form>
+</div>

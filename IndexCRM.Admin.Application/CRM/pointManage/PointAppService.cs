@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Dynamic;
@@ -43,13 +44,13 @@ namespace IndexCRM.Admin.CRM.pointManage
                 _pointRepository.Update(vipPoint);
 
                 PointRecord pr = new PointRecord();
-                pr.Id = System.Guid.NewGuid().ToString().ToUpper();
+                pr.Id = Guid.NewGuid().ToString().ToUpper();
                 pr.VipId = input.VipId;
                 pr.PointChange = input.Amount;
                 pr.PointExplain = input.Explain;
                 pr.PosNo = "";
                 pr.AddMan = AsyncHelper.RunSync(() => UserManager.GetUserByIdAsync((long)AbpSession.UserId)).Name;
-                pr.AddTime = System.DateTime.Now;
+                pr.AddTime = DateTime.Now;
                 _pointRecordRepository.Insert(pr);
             }
             else

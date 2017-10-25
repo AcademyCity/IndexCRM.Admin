@@ -197,6 +197,7 @@
     <Compile Include="Friendships\FriendshipState.cs" />
     <Compile Include="Friendships\Cache\IUserFriendsCache.cs" />
     <Compile Include="Friendships\IFriendshipManager.cs" />
+    <Compile Include="Function\Utils.cs" />
     <Compile Include="IAppFolders.cs" />
     <Compile Include="Identity\IdentitySmsMessageService.cs" />
     <Compile Include="Localization\CultureHelper.cs" />

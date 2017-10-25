@@ -32,7 +32,7 @@
                         maxWidth: 100
                     },
                     {
-                        name: app.localize('变化原因'),
+                        name: "变化原因",
                         field: 'pointExplain',
                         minWidth: 200
                     },
