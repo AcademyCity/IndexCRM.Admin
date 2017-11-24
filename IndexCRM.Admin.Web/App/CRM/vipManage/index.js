@@ -1,6 +1,6 @@
 ﻿(function () {
 
-    appModule.controller('crm.vipManage.vip.index', [
+    appModule.controller('crm.vipManage.index', [
         '$scope', '$uibModal', '$stateParams', 'uiGridConstants', 'abp.services.app.vip',
         function ($scope, $uibModal, $stateParams, uiGridConstants, vipService) {
             var vm = this;

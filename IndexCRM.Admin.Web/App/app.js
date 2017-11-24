@@ -188,8 +188,16 @@ appModule.config([
                 url: '/couponManage',
                 templateUrl: '~/App/CRM/couponManage/index.cshtml'
             });
+
+            if (abp.auth.hasPermission('CRM.CouponManage.CreateCoupon')) {
+                $stateProvider.state('createCoupon', {
+                    url: '/couponManage/createCoupon',
+                    templateUrl: '~/App/CRM/couponManage/couponCreateOrEdit.cshtml'
+                });
+            }
         }
-        
+
+
 
         //$qProvider settings
         $qProvider.errorOnUnhandledRejections(false);
