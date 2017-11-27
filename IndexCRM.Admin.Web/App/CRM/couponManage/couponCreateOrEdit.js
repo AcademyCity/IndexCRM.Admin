@@ -5,7 +5,8 @@
             var vm = this;
             vm.loading = false;
 
-            vm.user = null;
+
+            vm.couponConfig = null;
             vm.couponConfigId = $stateParams.couponConfigId;
 
             vm.save = function () {
@@ -25,6 +26,14 @@
 
             };
 
+            vm.changePicture = function () {
+                $uibModal.open({
+                    templateUrl: '~/App/CRM/couponManage/changePicture.cshtml',
+                    controller: 'crm.couponManage.changePicture as vm',
+                    backdrop: 'static'
+                });
+            };
+
             function init() {
                 console.log("couponConfigId:" + vm.couponConfigId);
                 couponService.getCouponConfigForEdit({
@@ -32,35 +41,59 @@
                 }).then(function (result) {
                     console.log(result.data);
                     if (result.data != null) {
-                        vm.couponConfig = result;
-
+                        vm.couponConfig = result.data;
+                        vm.couponConfig.startTime = vm.couponConfig.startTime.replace("T", " ").substr(0, 16);
+                        vm.couponConfig.endTime = vm.couponConfig.endTime.replace("T", " ").substr(0, 16);
+                        vm.couponConfig.couponExplain = "1.shdksaj\r\n2.sadas";
                     }
                 });
             }
 
             init();
 
-            $('#config-demo').daterangepicker({
+            $("#StartTime").daterangepicker({
                 singleDatePicker: true,
                 showDropdowns: true,
-                autoUpdateInput: false,
+                autoUpdateInput: true,
                 timePicker24Hour: true,
                 timePicker: true,
+                minDate: new Date().getFullYear() + '-01-01',
+                maxDate: new Date().getFullYear() + 20 + '-12-31',
                 "locale": {
                     format: 'YYYY-MM-DD HH:mm',
                     applyLabel: "应用",
                     cancelLabel: "取消",
-                    resetLabel: "重置",
                 }
-            },
-                function (start, end, label) {
-                    beginTimeTake = start;
-                    if (!this.startDate) {
-                        this.element.val('');
-                    } else {
-                        this.element.val(this.startDate.format(this.locale.format));
-                    }
-                });
+            }, function (start, end, label) {
+                beginTimeTake = start;
+                if (!this.startDate) {
+                    this.element.val('');
+                } else {
+                    this.element.val(this.startDate.format(this.locale.format));
+                }
+            });
+
+            $("#EndTime").daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                autoUpdateInput: true,
+                timePicker24Hour: true,
+                timePicker: true,
+                minDate: new Date().getFullYear() + '-01-01',
+                maxDate: new Date().getFullYear() + 20 + '-12-31',
+                "locale": {
+                    format: 'YYYY-MM-DD HH:mm',
+                    applyLabel: "应用",
+                    cancelLabel: "取消",
+                }
+            }, function (start, end, label) {
+                beginTimeTake = start;
+                if (!this.startDate) {
+                    this.element.val('');
+                } else {
+                    this.element.val(this.startDate.format(this.locale.format));
+                }
+            });
 
 
         }

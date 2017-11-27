@@ -20,25 +20,25 @@
                             <div class="row">
                                 <div class="col-md-8">
                                     <div class="form-group form-md-line-input">
-                                        <input type="text" class="form-control" id="form_control_1" placeholder="">
-                                        <label for="form_control_1">优惠券名称</label>
+                                        <input type="text" class="form-control" id="form_control_1" placeholder="" ng-model="vm.couponConfig.couponName">
+                                        <label for="form_control_1" style="color:#000000;">优惠券名称</label>
                                         <span class="help-block"></span>
                                     </div>
                                     <div class="form-group form-md-line-input">
-                                        <input type="number" class="form-control" id="form_control_1" placeholder="">
-                                        <label for="form_control_1">兑换积分</label>
+                                        <input type="number" class="form-control" id="form_control_1" placeholder="" ng-model="vm.couponConfig.couponPoint">
+                                        <label for="form_control_1" style="color:#000000;">兑换积分</label>
                                         <span class="help-block"></span>
                                     </div>
                                     <div class="form-group form-md-line-input">
-                                        <input type="number" class="form-control" id="form_control_1" placeholder="">
-                                        <label for="form_control_1">优惠券数量</label>
+                                        <input type="number" class="form-control" id="form_control_1" placeholder="" ng-model="vm.couponConfig.couponNum">
+                                        <label for="form_control_1" style="color:#000000;">优惠券数量</label>
                                         <span class="help-block"></span>
                                     </div>
                                     <div class="form-group form-md-line-input">
                                         <label>有效期</label>
                                         <div class="md-radio-inline">
                                             <div class="md-radio">
-                                                <input type="radio" id="radio1" name="radio" class="md-radiobtn" checked="">
+                                                <input type="radio" id="radio1" name="radio" class="md-radiobtn" ng-model="vm.couponConfig.validityMode" value="1">
                                                 <label for="radio1">
                                                     <span class="inc"></span>
                                                     <span class="check"></span>
@@ -47,7 +47,7 @@
                                                 </label>
                                             </div>
                                             <div class="md-radio">
-                                                <input type="radio" id="radio2" name="radio" class="md-radiobtn">
+                                                <input type="radio" id="radio2" name="radio" class="md-radiobtn" ng-model="vm.couponConfig.validityMode" value="2">
                                                 <label for="radio2">
                                                     <span class="inc"></span>
                                                     <span class="check"></span>
@@ -56,11 +56,11 @@
                                                 </label>
                                             </div>
                                         </div>
-                                    </div> 
-                                    <div class="row"> 
+                                    </div>
+                                    <div class="row" ng-show="vm.couponConfig.validityMode==1">
                                         <div class="col-md-5">
-                                            <div class="form-group form-md-line-input">
-                                                <input type="text" id="config-demo" class="form-control" style="text-align:center" id="form_control_1" placeholder="">
+                                            <div class="form-group form-md-line-input has-success">
+                                                <input type="text" id="StartTime" class="form-control" ng-model="vm.couponConfig.startTime" style="text-align:center;border-bottom: 1px solid #c2cad8;" readonly placeholder="">
                                                 <label for="form_control_1"></label>
                                                 <span class="help-block"></span>
                                             </div>
@@ -71,8 +71,8 @@
                                             </div>
                                         </div>
                                         <div class="col-md-5">
-                                            <div class="form-group form-md-line-input">
-                                                <input type="text" class="form-control" style="text-align:center" id="form_control_1" placeholder="">
+                                            <div class="form-group form-md-line-input has-success">
+                                                <input type="text" id="EndTime" class="form-control" ng-model="vm.couponConfig.endTime" style="text-align:center;border-bottom: 1px solid #c2cad8;" readonly placeholder="">
                                                 <label for="form_control_1"></label>
                                                 <span class="help-block"></span>
                                             </div>
@@ -83,7 +83,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <div class="row" ng-show="vm.couponConfig.validityMode==2">
                                         <div class="col-md-2" style="text-align:center">
                                             <div class="form-group form-md-line-input">
                                                 <div style="height:34px;line-height:34px">获取后，第</div>
@@ -91,7 +91,7 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group form-md-line-input">
-                                                <input type="text" class="form-control" style="text-align:center" id="form_control_1" placeholder="">
+                                                <input type="number" class="form-control" ng-model="vm.couponConfig.effectDate" style="text-align:center" id="form_control_1" placeholder="">
                                                 <label for="form_control_1"></label>
                                                 <span class="help-block"></span>
                                             </div>
@@ -103,7 +103,7 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group form-md-line-input">
-                                                <input type="text" class="form-control" style="text-align:center" id="form_control_1" placeholder="">
+                                                <input type="number" class="form-control" ng-model="vm.couponConfig.validDate" style="text-align:center" id="form_control_1" placeholder="">
                                                 <label for="form_control_1"></label>
                                                 <span class="help-block"></span>
                                             </div>
@@ -115,7 +115,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group form-md-line-input">
-                                        <label>是否在商城显示</label>
+                                        <label for="form_control_1">是否在商城显示</label>
                                         <div class="md-radio-inline">
                                             <div class="md-radio">
                                                 <input type="radio" id="radio3" name="radio1" class="md-radiobtn" checked="">
@@ -138,18 +138,18 @@
                                         </div>
                                     </div>
                                     <div class="form-group form-md-line-input">
-                                        <input type="number" class="form-control" id="form_control_1" placeholder="">
-                                        <label for="form_control_1">商城排序</label>
+                                        <input type="number" class="form-control" id="form_control_1" ng-model="vm.couponConfig.sort" placeholder="">
+                                        <label for="form_control_1" style="color:#000000;">商城排序</label>
                                         <span class="help-block">正序显示，默认9999</span>
                                     </div>
                                     <div class="form-group form-md-line-input">
-                                        <input type="text" class="form-control" id="form_control_1" placeholder="">
-                                        <label for="form_control_1">POSKey</label>
+                                        <input type="text" class="form-control" id="form_control_1" ng-model="vm.couponConfig.posKey" placeholder="">
+                                        <label for="form_control_1" style="color:#000000;">POSKey</label>
                                         <span class="help-block">可不填，用于优惠券稽核</span>
                                     </div>
                                     <div class="form-group form-md-line-input">
-                                        <textarea class="form-control" rows="6"></textarea>
-                                        <label for="form_control_1">优惠券说明</label>
+                                        <textarea class="form-control" rows="6" ng-model="vm.couponConfig.couponExplain"></textarea>
+                                        <label for="form_control_1" style="color:#000000;">优惠券说明</label>
                                     </div>
                                 </div>
                                 <div class="col-md-4 text-center">
@@ -157,11 +157,11 @@
                                         <img src="@Url.Content("~/Common/Images/default-profile-picture.png")" width="200" height="200" class="img-thumbnail img-rounded user-edit-dialog-profile-image" />
                                     </div>
                                     <div class="form-group form-md-line-input">
-                                        <button type="button" class="btn blue">上传图片</button>
+                                        <button type="button" class="btn blue" ng-click="vm.changePicture()">上传图片</button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-actions noborder" style="text-align: right">
+                            <div class="form-actions noborder">
                                 <button type="button" class="btn blue">创建</button>
                                 <button type="button" class="btn default">返回</button>
                             </div>

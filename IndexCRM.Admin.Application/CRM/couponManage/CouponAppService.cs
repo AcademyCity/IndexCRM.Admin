@@ -135,15 +135,19 @@ namespace IndexCRM.Admin.CRM.couponManage
             if (string.IsNullOrEmpty(input.CouponConfigId))
             {
                 //Creating a new coupon
-
+                return null;
             }
             else
             {
                 //Editing an existing coupon
+                var couponConfig = _couponConfigRepository.FirstOrDefault(u => u.Id==input.CouponConfigId);
 
+                var couponConfigDto = couponConfig.MapTo<GetCouponConfigForEditOutput>();
+
+                return couponConfigDto;
             }
 
-            return null;
+           
         }
         
     }

@@ -234,7 +234,7 @@
 
             vm.toCreateCoupon = function () {
                 $state.go('createCoupon', {
-                    couponConfigId: "xx"
+                    couponConfigId: "643B56B8-BDE4-4368-B2E1-E5D27A9470FD"
                 });
             }
 
