@@ -1,21 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2008
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{DFA48E27-7D53-4955-A722-3D91A7119BE7}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{67BE60D5-7E45-4079-B46D-B037BD5A236D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IndexCRM.Admin.Tests", "Tests\IndexCRM.Admin.Tests\IndexCRM.Admin.Tests.csproj", "{7F0AE638-2772-445B-B198-6CF9D7E2C8AC}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IndexCRM.Admin.WebApi", "IndexCRM.Admin.WebApi\IndexCRM.Admin.WebApi.csproj", "{5EB52D3D-09FD-463A-B02A-8D9856BD3724}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IndexCRM.Admin.Web", "IndexCRM.Admin.Web\IndexCRM.Admin.Web.csproj", "{897F6FD8-6F90-48E4-95A5-B4429B896205}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IndexCRM.Admin.Core", "IndexCRM.Admin.Core\IndexCRM.Admin.Core.csproj", "{17298EA0-AF73-4F30-B6F1-2066100D7D74}"
@@ -34,14 +21,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7F0AE638-2772-445B-B198-6CF9D7E2C8AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7F0AE638-2772-445B-B198-6CF9D7E2C8AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7F0AE638-2772-445B-B198-6CF9D7E2C8AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7F0AE638-2772-445B-B198-6CF9D7E2C8AC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5EB52D3D-09FD-463A-B02A-8D9856BD3724}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5EB52D3D-09FD-463A-B02A-8D9856BD3724}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5EB52D3D-09FD-463A-B02A-8D9856BD3724}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5EB52D3D-09FD-463A-B02A-8D9856BD3724}.Release|Any CPU.Build.0 = Release|Any CPU
 		{897F6FD8-6F90-48E4-95A5-B4429B896205}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{897F6FD8-6F90-48E4-95A5-B4429B896205}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{897F6FD8-6F90-48E4-95A5-B4429B896205}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -67,7 +46,9 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{7F0AE638-2772-445B-B198-6CF9D7E2C8AC} = {67BE60D5-7E45-4079-B46D-B037BD5A236D}
 		{B156DA32-D231-43B8-AE22-61C0C6B9F517} = {05F773EC-8A60-4889-BB58-7B4E742D1CD5}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D6CF1787-A3F0-4DC1-A291-13B9FFF4B074}
 	EndGlobalSection
 EndGlobal

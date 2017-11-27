@@ -5,7 +5,7 @@ namespace IndexCRM.Admin.CRM.couponManage.Dto
 {
     public class GetCouponConfigInput : PagedAndSortedInputDto, IShouldNormalize
     {
-        public string VipId { get; set; }
+        public string CouponConfigId { get; set; }
 
         public void Normalize()
         {

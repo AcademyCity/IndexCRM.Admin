@@ -191,7 +191,7 @@ appModule.config([
 
             if (abp.auth.hasPermission('CRM.CouponManage.CreateCoupon')) {
                 $stateProvider.state('createCoupon', {
-                    url: '/couponManage/createCoupon',
+                    url: '/couponManage/createCoupon/:couponConfigId',
                     templateUrl: '~/App/CRM/couponManage/couponCreateOrEdit.cshtml'
                 });
             }

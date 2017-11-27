@@ -17,7 +17,7 @@ using Abp.Linq.Extensions;
 
 namespace IndexCRM.Admin.CRM.couponManage
 {
-    [AbpAuthorize(AppPermissions.CRM_VipManage)]
+    [AbpAuthorize(AppPermissions.CRM_CouponManage)]
     public class CouponAppService : AdminAppServiceBase, ICouponAppService
     {
 
@@ -129,5 +129,22 @@ namespace IndexCRM.Admin.CRM.couponManage
                 vipCouponListDto
                 );
         }
+
+        public async Task<GetCouponConfigForEditOutput> GetCouponConfigForEdit(GetCouponConfigInput input)
+        {
+            if (string.IsNullOrEmpty(input.CouponConfigId))
+            {
+                //Creating a new coupon
+
+            }
+            else
+            {
+                //Editing an existing coupon
+
+            }
+
+            return null;
+        }
+        
     }
 }

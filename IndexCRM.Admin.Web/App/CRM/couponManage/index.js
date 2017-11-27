@@ -233,9 +233,8 @@
             }
 
             vm.toCreateCoupon = function () {
-                console.log("xx");
                 $state.go('createCoupon', {
-
+                    couponConfigId: "xx"
                 });
             }
 

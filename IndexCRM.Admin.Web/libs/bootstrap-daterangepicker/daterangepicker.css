@@ -250,7 +250,8 @@
 }
 
 .daterangepicker select.yearselect {
-  width: 40%;
+    float: right;
+    width: 40%;
 }
 
 .daterangepicker select.hourselect, .daterangepicker select.minuteselect, .daterangepicker select.secondselect, .daterangepicker select.ampmselect {
