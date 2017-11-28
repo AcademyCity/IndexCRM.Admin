@@ -1,12 +1,12 @@
 ﻿(function () {
     appModule.controller('crm.couponManage.changePicture', [
-        '$scope', 'appSession', '$uibModalInstance', 'FileUploader', 'abp.services.app.profile',
-        function ($scope, appSession, $uibModalInstance, fileUploader, profileService) {
+        '$scope', 'appSession', '$uibModalInstance', 'FileUploader', 'abp.services.app.profile', 'couponImg',
+        function ($scope, appSession, $uibModalInstance, fileUploader, profileService, couponImg) {
             var vm = this;
 
             var $jcropImage = null;
             vm.uploadedFileName = null;
-  
+
             vm.uploader = new fileUploader({
                 url: abp.appPath + 'Profile/UploadProfilePicture',
                 headers: {
@@ -24,9 +24,9 @@
                             abp.message.warn(app.localize('ProfilePicture_Warn_FileType'));
                             return false;
                         }
-
+                        console.log(item.size);
                         //File size check
-                        if (item.size > 102400) //100KB
+                        if (item.size > 1024000) //100KB
                         {
                             abp.message.warn(app.localize('ProfilePicture_Warn_SizeLimit'));
                             return false;
@@ -57,13 +57,17 @@
                     $jcropImage.data('Jcrop').destroy();
                     $jcropImage = null;
                     $('#HeaderProfilePicture').attr('src', app.getUserProfilePicturePath());
-
-                    $uibModalInstance.close(result);
+                    if (result.success) {
+                        $uibModalInstance.close(result.data);
+                    }
+                    else {
+                        $uibModalInstance.close(couponImg);
+                    } 
                 });
             };
 
             vm.cancel = function () {
-                $uibModalInstance.dismiss();
+                $uibModalInstance.close(couponImg);
             };
 
             vm.uploader.onSuccessItem = function (fileItem, response, status, headers) {

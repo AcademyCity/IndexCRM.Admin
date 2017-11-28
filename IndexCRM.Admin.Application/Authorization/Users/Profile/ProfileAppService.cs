@@ -176,8 +176,8 @@ namespace IndexCRM.Admin.Authorization.Users.Profile
             }
 
             FileInfo info = new FileInfo(file);
-            Directory.CreateDirectory(HttpContext.Current.Server.MapPath("~/Img/" + file));
-            File.WriteAllBytes(file, buffer);
+            //Directory.CreateDirectory();
+            File.WriteAllBytes(HttpContext.Current.Server.MapPath("~/Img/" + file), buffer);
             return file;
         }
 

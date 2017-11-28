@@ -8,45 +8,70 @@
 
             vm.couponConfig = null;
             vm.couponConfigId = $stateParams.couponConfigId;
+            vm.couponImg = "";
 
             vm.save = function () {
+                vm.couponConfig.couponImg = vm.couponImg;
+                if (vm.couponConfig.couponImg == "") {
+                    abp.notify.warn("请上传图片！");
+                }
+                if (vm.couponConfig.validityMode == 1) {
+                    if (vm.couponConfig.startTime != "" && vm.couponConfig.endTime != "") {
+                        abp.notify.warn("请填写有效期！");
+                    }
+                }
+                if (vm.couponConfig.validityMode == 2) {
+                    if (vm.couponConfig.effectDate != "" && vm.couponConfig.validDate != "") {
+                        abp.notify.warn("请填写有效期！");
+                    }
+                }
 
-                vm.saving = true;
-                userService.createOrUpdateUser({
-                    user: vm.user
-                }).then(function () {
-                    abp.notify.info(app.localize('SavedSuccessfully'));
-
-                }).finally(function () {
-                    vm.saving = false;
-                });
+                //vm.saving = true;
+                //couponService.createOrUpdateUser({
+                //    user: vm.user
+                //}).then(function () {
+                //    abp.notify.info(app.localize('SavedSuccessfully'));
+                //vm.back();
+                //}).finally(function () {
+                //    vm.saving = false;
+                //});
             };
 
-            vm.cancel = function () {
+            vm.back = function () {
+                $state.go('couponManage', {
 
+                });
             };
 
             vm.changePicture = function () {
                 var modalInstance = $uibModal.open({
                     templateUrl: '~/App/CRM/couponManage/changePicture.cshtml',
                     controller: 'crm.couponManage.changePicture as vm',
-                    backdrop: 'static'
+                    backdrop: 'static',
+                    resolve: {
+                        couponImg: function () {
+                            return vm.couponImg;
+                        }
+                    }
                 });
 
                 modalInstance.result.then(function (result) {
-                    console.log(result);
+                    vm.couponImg = result;
                 });
             };
 
             function init() {
-                console.log("couponConfigId:" + vm.couponConfigId);
                 couponService.getCouponConfigForEdit({
                     CouponConfigId: vm.couponConfigId
                 }).then(function (result) {
-                    if (result.data != null) {
-                        vm.couponConfig = result.data;
+                    vm.couponConfig = result.data;
+                    if (result.data.id != null) {
                         vm.couponConfig.startTime = vm.couponConfig.startTime.replace("T", " ").substr(0, 16);
                         vm.couponConfig.endTime = vm.couponConfig.endTime.replace("T", " ").substr(0, 16);
+                    }
+                    else {
+                        vm.couponConfig.validityMode = "1";
+                        vm.couponConfig.isShow = "true";
                         vm.couponConfig.couponExplain = "1.shdksaj\r\n2.sadas";
                     }
                 });
