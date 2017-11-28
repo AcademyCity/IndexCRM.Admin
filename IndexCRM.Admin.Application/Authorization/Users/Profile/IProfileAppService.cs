@@ -14,6 +14,8 @@ namespace IndexCRM.Admin.Authorization.Users.Profile
 
         Task UpdateProfilePicture(UpdateProfilePictureInput input);
 
+        string UpdateCouponPicture(UpdateProfilePictureInput input);
+
         Task<GetPasswordComplexitySettingOutput> GetPasswordComplexitySetting();
     }
 }

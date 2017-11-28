@@ -27,10 +27,14 @@
             };
 
             vm.changePicture = function () {
-                $uibModal.open({
+                var modalInstance = $uibModal.open({
                     templateUrl: '~/App/CRM/couponManage/changePicture.cshtml',
                     controller: 'crm.couponManage.changePicture as vm',
                     backdrop: 'static'
+                });
+
+                modalInstance.result.then(function (result) {
+                    console.log(result);
                 });
             };
 
@@ -39,7 +43,6 @@
                 couponService.getCouponConfigForEdit({
                     CouponConfigId: vm.couponConfigId
                 }).then(function (result) {
-                    console.log(result.data);
                     if (result.data != null) {
                         vm.couponConfig = result.data;
                         vm.couponConfig.startTime = vm.couponConfig.startTime.replace("T", " ").substr(0, 16);

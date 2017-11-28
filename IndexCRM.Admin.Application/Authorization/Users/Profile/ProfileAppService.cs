@@ -15,6 +15,9 @@ using IndexCRM.Admin.Security;
 using IndexCRM.Admin.Storage;
 using IndexCRM.Admin.Timing;
 using Newtonsoft.Json;
+using System.Drawing.Imaging;
+using System;
+using System.Web;
 
 namespace IndexCRM.Admin.Authorization.Users.Profile
 {
@@ -123,6 +126,59 @@ namespace IndexCRM.Admin.Authorization.Users.Profile
             user.ProfilePictureId = storedFile.Id;
 
             FileHelper.DeleteIfExists(tempProfilePicturePath);
+        }
+
+        public string UpdateCouponPicture(UpdateProfilePictureInput input)
+        {
+            var tempProfilePicturePath = Path.Combine(_appFolders.TempFileDownloadFolder, input.FileName);
+
+            byte[] byteArray;
+
+            using (var fsTempProfilePicture = new FileStream(tempProfilePicturePath, FileMode.Open))
+            {
+                using (var bmpImage = new Bitmap(fsTempProfilePicture))
+                {
+                    var width = input.Width == 0 ? bmpImage.Width : input.Width;
+                    var height = input.Height == 0 ? bmpImage.Height : input.Height;
+                    var bmCrop = bmpImage.Clone(new Rectangle(input.X, input.Y, width, height), bmpImage.PixelFormat);
+
+                    using (var stream = new MemoryStream())
+                    {
+                        bmCrop.Save(stream, bmpImage.RawFormat);
+                        stream.Close();
+                        byteArray = stream.ToArray();
+                    }
+                }
+            }
+
+            if (byteArray.LongLength > 102400) //100 KB
+            {
+                throw new UserFriendlyException(L("ResizedProfilePicture_Warn_SizeLimit"));
+            }
+            
+            FileHelper.DeleteIfExists(tempProfilePicturePath);
+            return CreateImageFromBytes(Guid.NewGuid().ToString(), byteArray);
+        }
+
+        private string CreateImageFromBytes(string fileName, byte[] buffer)
+        {
+            string file = fileName;
+            MemoryStream ms = new MemoryStream(buffer);
+            Image image = Image.FromStream(ms);
+            ImageFormat format = image.RawFormat;
+            if (format.Equals(ImageFormat.Jpeg))
+            {
+                file += ".jpeg";
+            }
+            else if (format.Equals(ImageFormat.Png))
+            {
+                file += ".png";
+            }
+
+            FileInfo info = new FileInfo(file);
+            Directory.CreateDirectory(HttpContext.Current.Server.MapPath("~/Img/" + file));
+            File.WriteAllBytes(file, buffer);
+            return file;
         }
 
         public async Task<GetPasswordComplexitySettingOutput> GetPasswordComplexitySetting()

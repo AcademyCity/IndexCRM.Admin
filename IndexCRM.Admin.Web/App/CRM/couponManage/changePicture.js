@@ -6,7 +6,7 @@
 
             var $jcropImage = null;
             vm.uploadedFileName = null;
-
+  
             vm.uploader = new fileUploader({
                 url: abp.appPath + 'Profile/UploadProfilePicture',
                 headers: {
@@ -47,18 +47,18 @@
                     resizeParams = $jcropImage.data("Jcrop").tellSelect();
                 }
 
-                profileService.updateProfilePicture({
+                profileService.updateCouponPicture({
                     fileName: vm.uploadedFileName,
                     x: parseInt(resizeParams.x),
                     y: parseInt(resizeParams.y),
                     width: parseInt(resizeParams.w),
                     height: parseInt(resizeParams.h)
-                }).then(function () {
+                }).then(function (result) {
                     $jcropImage.data('Jcrop').destroy();
                     $jcropImage = null;
                     $('#HeaderProfilePicture').attr('src', app.getUserProfilePicturePath());
 
-                    $uibModalInstance.close();
+                    $uibModalInstance.close(result);
                 });
             };
 
