@@ -2250,6 +2250,7 @@
     <Content Include="App\CRM\couponManage\couponCreateOrEdit.cshtml" />
     <Content Include="App\CRM\couponManage\changePicture.cshtml" />
     <None Include="Properties\PublishProfiles\aspnetzero - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\xx.pubxml" />
     <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
     <Content Include="Scripts\i18n\angular-locale_af-na.js" />

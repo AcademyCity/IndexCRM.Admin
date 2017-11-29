@@ -11,7 +11,7 @@
             </div>
         </div>
         <div class="col-xs-6 text-right">
-            <button class="btn btn-primary blue" ng-click="vm.toCreateCoupon()"><i class="fa fa-plus"></i> 添加优惠券</button>
+            <button class="btn btn-primary blue" ng-click="vm.toCreateCoupon()"><i class="fa fa-plus"></i>创建优惠券</button>
         </div>
     </div>
     <div class="portlet light margin-bottom-0">
@@ -37,7 +37,7 @@
                 </form>
             </div>
             <div busy-if="vm.loading">
-                <div ui-grid="vm.vipGridOptions" ui-grid-pagination ui-grid-resize-columns dir=@(CultureHelper.IsRtl ? "rtl" : "")></div>
+                <div ui-grid="vm.couponConfigGridOptions" ui-grid-pagination ui-grid-resize-columns dir=@(CultureHelper.IsRtl ? "rtl" : "")></div>
             </div>
         </div>
     </div>

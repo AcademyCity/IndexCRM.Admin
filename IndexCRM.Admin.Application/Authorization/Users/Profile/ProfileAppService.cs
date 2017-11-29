@@ -18,6 +18,7 @@ using Newtonsoft.Json;
 using System.Drawing.Imaging;
 using System;
 using System.Web;
+using System.Configuration;
 
 namespace IndexCRM.Admin.Authorization.Users.Profile
 {
@@ -157,7 +158,7 @@ namespace IndexCRM.Admin.Authorization.Users.Profile
             }
             
             FileHelper.DeleteIfExists(tempProfilePicturePath);
-            return CreateImageFromBytes(Guid.NewGuid().ToString().ToUpper(), byteArray);
+            return ConfigurationManager.AppSettings["ImgSiteAddress"] + CreateImageFromBytes(Guid.NewGuid().ToString().ToUpper(), byteArray);
         }
 
         private string CreateImageFromBytes(string fileName, byte[] buffer)

@@ -5,7 +5,8 @@
             <div class="page-head">
                 <div class="page-title">
                     <h1>
-                        <span>创建优惠券</span>
+                        <span ng-show="vm.couponConfigId == ''">创建优惠券</span>
+                        <span ng-show="vm.couponConfigId != ''">修改优惠券</span>
                     </h1>
                 </div>
             </div>
@@ -22,17 +23,17 @@
                                     <div class="form-group form-md-line-input">
                                         <input type="text" class="form-control" id="form_control_1" placeholder="" ng-model="vm.couponConfig.couponName" required>
                                         <label for="form_control_1" style="color:#000000;">优惠券名称</label>
-                                        <span class="help-block"></span>
+                                        <span class="help-block">必填</span>
                                     </div>
                                     <div class="form-group form-md-line-input">
                                         <input type="number" class="form-control" id="form_control_1" placeholder="" ng-model="vm.couponConfig.couponPoint" required>
                                         <label for="form_control_1" style="color:#000000;">兑换积分</label>
-                                        <span class="help-block"></span>
+                                        <span class="help-block">必填</span>
                                     </div>
                                     <div class="form-group form-md-line-input">
                                         <input type="number" class="form-control" id="form_control_1" placeholder="" ng-model="vm.couponConfig.couponNum" required>
                                         <label for="form_control_1" style="color:#000000;">优惠券数量</label>
-                                        <span class="help-block"></span>
+                                        <span class="help-block">必填，0为无限</span>
                                     </div>
                                     <div class="form-group form-md-line-input">
                                         <label>有效期</label>
@@ -140,7 +141,7 @@
                                     <div class="form-group form-md-line-input">
                                         <input type="number" class="form-control" id="form_control_1" ng-model="vm.couponConfig.sort" placeholder="">
                                         <label for="form_control_1" style="color:#000000;">商城排序</label>
-                                        <span class="help-block">正序显示，可不填</span>
+                                        <span class="help-block">可不填，正序显示</span>
                                     </div>
                                     <div class="form-group form-md-line-input">
                                         <input type="text" class="form-control" id="form_control_1" ng-model="vm.couponConfig.posKey" placeholder="">
@@ -154,7 +155,8 @@
                                 </div>
                                 <div class="col-md-4 text-center">
                                     <div class="form-group form-md-line-input">
-                                        <img src="@Url.Content("~/Common/Images/default-profile-picture.png")" width="200" height="200" class="img-thumbnail img-rounded user-edit-dialog-profile-image" />
+                                        <img ng-if="vm.couponImg==''" src="@Url.Content("~/Common/Images/default-profile-picture.png")" width="200" height="200" class="img-thumbnail img-rounded user-edit-dialog-profile-image" />
+                                        <img ng-if="vm.couponImg!=''" ng-src="{{vm.couponImg}}" width="200" height="200" class="img-thumbnail img-rounded user-edit-dialog-profile-image" />
                                     </div>
                                     <div class="form-group form-md-line-input">
                                         <button type="button" class="btn blue" ng-click="vm.changePicture()">上传图片</button>
@@ -162,7 +164,8 @@
                                 </div>
                             </div>
                             <div class="form-actions noborder">
-                                <button type="button" class="btn blue" ng-click="vm.save()">创建</button>
+                                <button type="button" class="btn blue" ng-show="vm.couponConfigId == ''" ng-click="vm.save()">创建</button>
+                                <button type="button" class="btn blue" ng-show="vm.couponConfigId != ''" ng-click="vm.save()">修改</button>
                                 <button type="button" class="btn default" ng-click="vm.back()">返回</button>
                             </div>
                     </form>

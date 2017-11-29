@@ -11,12 +11,14 @@
             vm.couponImg = "";
 
             vm.save = function () {
+                console.log(vm.couponConfig.startTime + "--" + vm.couponConfig.startTime);
                 vm.couponConfig.couponImg = vm.couponImg;
                 if (vm.couponConfig.couponImg == "") {
                     abp.notify.warn("请上传图片！");
+                    return;
                 }
                 if (vm.couponConfig.validityMode == 1) {
-                    if (vm.couponConfig.startTime == "" && vm.couponConfig.endTime == "") {
+                    if (vm.couponConfig.startTime == null || vm.couponConfig.endTime == null) {
                         abp.notify.warn("请填写有效期！");
                         return;
                     }
@@ -38,12 +40,23 @@
                         return;
                     }
                 }
+                if (vm.couponConfig.couponName == null || vm.couponConfig.couponPoint == null
+                    || vm.couponConfig.couponNum == null || vm.couponConfig.couponExplain == null) {
+                    abp.notify.warn("请完善信息！");
+                    return;
+                }
 
                 vm.saving = true;
                 couponService.createOrUpdateCoupon({
                     couponConfig: vm.couponConfig
                 }).then(function () {
-                    abp.notify.info("创建成功！");
+                    if (vm.couponConfigId == "") {
+                        abp.notify.info("创建成功！");
+                    }
+                    else {
+                        abp.notify.info("修改成功！");    
+                    }
+                    
                     vm.back();
                 }).finally(function () {
                     vm.saving = false;
@@ -82,6 +95,8 @@
                     if (result.data.id != null) {
                         vm.couponConfig.startTime = vm.couponConfig.startTime.replace("T", " ").substr(0, 16);
                         vm.couponConfig.endTime = vm.couponConfig.endTime.replace("T", " ").substr(0, 16);
+                        vm.couponConfig.isShow = vm.couponConfig.isShow + "";
+                        vm.couponImg = vm.couponConfig.couponImg;
                     }
                     else {
                         vm.couponConfig.validityMode = "1";

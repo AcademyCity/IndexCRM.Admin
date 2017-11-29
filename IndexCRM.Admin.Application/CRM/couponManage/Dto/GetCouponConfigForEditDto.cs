@@ -18,6 +18,8 @@ namespace IndexCRM.Admin.CRM.couponManage.Dto
 
         public int? CouponNum { get; set; }
 
+        public int? SendCouponNum { get; set; }
+
         public string ValidityMode { get; set; }
 
         public string PosKey { get; set; }

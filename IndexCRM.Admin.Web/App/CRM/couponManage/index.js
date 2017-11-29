@@ -1,8 +1,8 @@
 ﻿(function () {
 
     appModule.controller('crm.couponManage.index', [
-        '$scope', '$state', '$uibModal', '$stateParams', 'uiGridConstants', 'abp.services.app.coupon',
-        function ($scope, $state, $uibModal, $stateParams, uiGridConstants, couponService) {
+        '$scope', '$state', '$uibModal', '$stateParams', "$timeout", 'uiGridConstants', 'abp.services.app.coupon',
+        function ($scope, $state, $uibModal, $stateParams, $timeout, uiGridConstants, couponService) {
             var vm = this;
 
             $scope.$on('$viewContentLoaded', function () {
@@ -46,67 +46,75 @@
                         '  <div class="btn-group dropdown" uib-dropdown="" dropdown-append-to-body>' +
                         '    <button class="btn btn-xs btn-primary blue" uib-dropdown-toggle="" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog"></i> ' + app.localize('Actions') + ' <span class="caret"></span></button>' +
                         '    <ul uib-dropdown-menu>' +
-                        '      <li ><a ng-click="grid.appScope.changePoint(row.entity)">删除</a></li>' +
+                        '      <li ><a ng-click="grid.appScope.editCouponConfig(row.entity)">修改优惠券</a></li>' +
+                        '      <li ><a ng-click="grid.appScope.deleteCouponConfig(row.entity)">删除优惠券</a></li>' +
                         '    </ul>' +
                         '  </div>' +
                         '</div>'
                     },
                     {
-                        name: "优惠券名称",
+                        name: '优惠券名称',
                         field: 'couponName',
-                        cellTemplate:
-                        '<div class=\"ui-grid-cell-contents\">' +
-                        '  <img ng-src="{{row.entity.profilePictureId}}" width="22" height="22" class="img-rounded img-profile-picture-in-grid" />' +
-                        '  {{COL_FIELD CUSTOM_FILTERS}} &nbsp;' +
-                        '</div>',
                         minWidth: 140
                     },
                     {
-                        name: "剩余数量",
+                        name: '优惠券数量',
                         field: 'couponNum',
-                        minWidth: 200
-                    },
-                    {
-                        name: "兑换积分",
-                        field: 'couponPoint',
-                        cellTemplate:
-                        '<div class=\"ui-grid-cell-contents\">' +
-                        '  <span class="label label-success">{{row.entity.couponPoint}}</span>' +
-                        '</div>',
-                        minWidth: 40
-                    },
-                    {
-                        name: app.localize('Birthday'),
-                        field: 'vipBirthday',
-                        minWidth: 200
-                    },
-                    {
-                        name: app.localize('PhoneNumber'),
-                        field: 'vipPhone',
                         minWidth: 100
                     },
                     {
-                        name: app.localize('Point'),
-                        field: 'vipPoint',
-                        minWidth: 40
+                        name: '已发送数量',
+                        field: 'sendCouponNum',
+                        minWidth: 100
                     },
                     {
-                        name: app.localize('Status'),
-                        field: 'status',
+                        name: '兑换积分',
+                        field: 'couponPoint',
+                        minWidth: 100
+                    },
+                    {
+                        name: '有效期模式',
+                        field: 'validityMode',
                         cellTemplate:
                         '<div class=\"ui-grid-cell-contents\">' +
-                        '  <span ng-show="row.entity.status==0" class="label label-default">未激活</span>' +
-                        '  <span ng-show="row.entity.status==1" class="label label-success">使用中</span>' +
-                        '  <span ng-show="row.entity.status==2" class="label label-danger">冻结中</span>' +
+                        '  <span ng-show="row.entity.validityMode==1">定时</span>' +
+                        '  <span ng-show="row.entity.validityMode==2">时长</span>' +
                         '</div>',
-                        minWidth: 40
+                        maxWidth: 100
                     },
-                    //{
-                    //    name: app.localize('LastLoginTime'),
-                    //    field: 'lastLoginTime',
-                    //    cellFilter: 'momentFormat: \'YYYY-MM-DD HH:mm:ss\'',
-                    //    minWidth: 100
-                    //},
+                    {
+                        name: '开始时间/生效日',
+                        field: 'startTime',
+                        cellFilter: 'momentFormat: \'YYYY-MM-DD HH:mm\'',
+                        cellTemplate:
+                        '<div class=\"ui-grid-cell-contents\">' +
+                        '  <span ng-show="row.entity.validityMode==1">{{COL_FIELD CUSTOM_FILTERS}}</span>' +
+                        '  <span ng-show="row.entity.validityMode==2">{{row.entity.effectDate}}</span>' +
+                        '</div>',
+                        minWidth: 100
+                    },
+                    {
+                        name: '结束时间/有效时长',
+                        field: 'endTime',
+                        cellFilter: 'momentFormat: \'YYYY-MM-DD HH:mm\'',
+                        cellTemplate:
+                        '<div class=\"ui-grid-cell-contents\">' +
+                        '  <span ng-show="row.entity.validityMode==1">{{COL_FIELD CUSTOM_FILTERS}}</span>' +
+                        '  <span ng-show="row.entity.validityMode==2">{{row.entity.validDate}}</span>' +
+                        '</div>',
+                        minWidth: 100
+                    },
+
+                    {
+                        name: '商城排序',
+                        field: 'sort',
+                        maxWidth: 100
+                    },
+                    {
+                        name: '创建人',
+                        field: 'addMan',
+                        minWidth: 100
+                    },
                     {
                         name: app.localize('CreationTime'),
                         field: 'addTime',
@@ -128,20 +136,37 @@
                     });
             };
 
-            vm.deleteCoupon = function (vip) {
-                couponService.deleteCoupon({
-                    id: vip.id
-                }).then(function (result) {
-                    vm.getVipList();
-                    abp.notify.success("操作成功！");
+            vm.editCouponConfig = function (couponConfig) {
+                $state.go('createCoupon', {
+                    couponConfigId: couponConfig.id
                 });
-            }
+            };
+
+            vm.deleteCouponConfig = function (couponConfig) {
+                abp.message.confirm(
+                    abp.utils.formatString("删除优惠券\n\r\n\r优惠券名称:{0}", couponConfig.couponName),
+                    function (isConfirmed) {
+                        $timeout(function () {
+                            if (isConfirmed) {
+                                vm.saving = true;
+                                couponService.deleteCouponConfig({
+                                    CouponConfigId: couponConfig.id
+                                }).then(function () {
+                                    abp.notify.success("操作成功");
+                                }).finally(function () {
+                                    vm.getCouponConfigList();
+                                });
+                            }
+                        }, 200);
+                    }
+                );
+            };
 
             vm.toCreateCoupon = function () {
                 $state.go('createCoupon', {
                     couponConfigId: ""
                 });
-            }
+            };
 
             vm.getCouponConfigList();
 

@@ -15,6 +15,7 @@ using IndexCRM.Admin.Function;
 using System.Linq.Dynamic;
 using Abp.Linq.Extensions;
 using Abp.Extensions;
+using System.Configuration;
 
 namespace IndexCRM.Admin.CRM.couponManage
 {
@@ -89,7 +90,6 @@ namespace IndexCRM.Admin.CRM.couponManage
                     .OrderByDescending(a => a.AddTime).ToList();
 
             var couponConfigListDto = couponConfigList.MapTo<List<CouponConfigListDto>>();
-
             return couponConfigListDto;
         }
 
@@ -147,10 +147,10 @@ namespace IndexCRM.Admin.CRM.couponManage
 
                 var couponConfigDto = couponConfig.MapTo<GetCouponConfigForEditDto>();
 
+                couponConfigDto.CouponImg = ConfigurationManager.AppSettings["ImgSiteAddress"] + couponConfigDto.CouponImg;
+
                 return couponConfigDto;
             }
-
-
         }
 
         public async Task CreateOrUpdateCoupon(GetCouponConfigForEditInput input)
@@ -205,19 +205,27 @@ namespace IndexCRM.Admin.CRM.couponManage
                 .PageBy(input)
                 .ToListAsync();
 
-            foreach (var item in couponConfigList)
-            {
-                if (item.CouponNum != 0)
-                {
-                    item.CouponNum = item.CouponNum - _couponConfigRepository.Count(a => a.Id == item.Id);
-                }
-            }
+
             var couponConfigListDto = couponConfigList.MapTo<List<GetCouponConfigForEditDto>>();
+
+            foreach (var item in couponConfigListDto)
+            {
+                item.SendCouponNum = _couponRepository.Count(a => a.CouponConfigId == item.Id);
+            }
 
             return new PagedResultDto<GetCouponConfigForEditDto>(
                 couponConfigCount,
                 couponConfigListDto
                 );
+        }
+
+        public async Task DeleteCouponConfig(GetCouponConfigInput input)
+        {
+            //Editing an existing coupon
+            var couponConfig = _couponConfigRepository.FirstOrDefault(u => u.Id == input.CouponConfigId);
+            couponConfig.IsDelete = true;
+            await _couponConfigRepository.UpdateAsync(couponConfig);
+
         }
     }
 }
