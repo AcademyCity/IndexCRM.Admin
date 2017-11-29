@@ -123,29 +123,11 @@
                 vipService.getVipList($.extend({ filter: vm.filterText }, vm.requestParams))
                     .then(function (result) {
                         vm.vipGridOptions.totalItems = result.data.totalCount;
-                        vm.vipGridOptions.data = addRoleNamesField(result.data.items);
+                        vm.vipGridOptions.data = result.data.items;
                     }).finally(function () {
                         vm.loading = false;
                     });
             };
-
-            function addRoleNamesField(users) {
-                for (var i = 0; i < users.length; i++) {
-                    var user = users[i];
-                    user.getRoleNames = function () {
-                        var roleNames = '';
-                        for (var j = 0; j < this.roles.length; j++) {
-                            if (roleNames.length) {
-                                roleNames = roleNames + ', ';
-                            }
-                            roleNames = roleNames + this.roles[j].roleName;
-                        };
-
-                        return roleNames;
-                    }
-                }
-                return users;
-            }
 
             vm.ocDisableVip = function (vip) {
                 vipService.ocDisableVip({

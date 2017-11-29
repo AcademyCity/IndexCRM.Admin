@@ -24,14 +24,12 @@
                             abp.message.warn(app.localize('ProfilePicture_Warn_FileType'));
                             return false;
                         }
-                        console.log(item.size);
                         //File size check
                         if (item.size > 1024000) //100KB
                         {
                             abp.message.warn(app.localize('ProfilePicture_Warn_SizeLimit'));
                             return false;
                         }
-
                         return true;
                     }
                 }]
@@ -57,12 +55,8 @@
                     $jcropImage.data('Jcrop').destroy();
                     $jcropImage = null;
                     $('#HeaderProfilePicture').attr('src', app.getUserProfilePicturePath());
-                    if (result.success) {
-                        $uibModalInstance.close(result.data);
-                    }
-                    else {
-                        $uibModalInstance.close(couponImg);
-                    } 
+                    $uibModalInstance.close(result.data);
+            
                 });
             };
 

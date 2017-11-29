@@ -198,7 +198,8 @@
     <Compile Include="Configuration\Host\Dto\TwoFactorLoginSettingsEditDto.cs" />
     <Compile Include="Configuration\Host\Dto\UserLockOutSettingsEditDto.cs" />
     <Compile Include="Configuration\Tenants\Dto\LdapSettingsEditDto.cs" />
-    <Compile Include="CRM\couponManage\Dto\GetCouponConfigForEditOutput.cs" />
+    <Compile Include="CRM\couponManage\Dto\GetCouponConfigForEditInput.cs" />
+    <Compile Include="CRM\couponManage\Dto\GetCouponConfigForEditDto.cs" />
     <Compile Include="CRM\couponManage\Dto\GetVipCouponInput.cs" />
     <Compile Include="CRM\couponManage\Dto\SendCouponInput.cs" />
     <Compile Include="CRM\couponManage\Dto\GetCouponConfigInput.cs" />

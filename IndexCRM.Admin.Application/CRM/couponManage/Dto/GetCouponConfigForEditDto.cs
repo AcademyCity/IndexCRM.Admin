@@ -3,8 +3,8 @@ using System;
 
 namespace IndexCRM.Admin.CRM.couponManage.Dto
 {
-    [AutoMapFrom(typeof(CouponConfig))]
-    public class GetCouponConfigForEditOutput
+    [AutoMap(typeof(CouponConfig))]
+    public class GetCouponConfigForEditDto
     {
         public string Id { get; set; }
 
@@ -33,6 +33,10 @@ namespace IndexCRM.Admin.CRM.couponManage.Dto
         public int? Sort { get; set; }
 
         public bool? IsShow { get; set; }
+
+        public DateTime? AddTime { get; set; }
+
+        public string AddMan { get; set; }
 
     }
 }

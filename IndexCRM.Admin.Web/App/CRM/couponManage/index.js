@@ -1,8 +1,8 @@
 ﻿(function () {
 
     appModule.controller('crm.couponManage.index', [
-        '$scope', '$state', '$uibModal', '$stateParams', 'uiGridConstants', 'abp.services.app.vip',
-        function ($scope, $state, $uibModal, $stateParams, uiGridConstants, vipService) {
+        '$scope', '$state', '$uibModal', '$stateParams', 'uiGridConstants', 'abp.services.app.coupon',
+        function ($scope, $state, $uibModal, $stateParams, uiGridConstants, couponService) {
             var vm = this;
 
             $scope.$on('$viewContentLoaded', function () {
@@ -12,7 +12,7 @@
             vm.loading = false;
             vm.advancedFiltersAreShown = false;
             vm.filterText = $stateParams.filterText || '';
-            vm.currentUserId = abp.session.userId; 
+            vm.currentUserId = abp.session.userId;
 
             vm.permissions = {
 
@@ -26,7 +26,7 @@
                 sorting: null
             };
 
-            vm.vipGridOptions = {
+            vm.couponConfigGridOptions = {
                 enableHorizontalScrollbar: uiGridConstants.scrollbars.WHEN_NEEDED,
                 enableVerticalScrollbar: uiGridConstants.scrollbars.WHEN_NEEDED,
                 paginationPageSizes: app.consts.grid.defaultPageSizes,
@@ -46,33 +46,32 @@
                         '  <div class="btn-group dropdown" uib-dropdown="" dropdown-append-to-body>' +
                         '    <button class="btn btn-xs btn-primary blue" uib-dropdown-toggle="" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog"></i> ' + app.localize('Actions') + ' <span class="caret"></span></button>' +
                         '    <ul uib-dropdown-menu>' +
-                        '      <li ng-show="row.entity.status==1"><a ng-click="grid.appScope.ocDisableVip(row.entity)">冻结</a></li>' +
-                        '      <li ng-show="row.entity.status==2"><a ng-click="grid.appScope.ocDisableVip(row.entity)">解冻</a></li>' +
-                        '      <li ><a ng-click="grid.appScope.changePoint(row.entity)">修改积分</a></li>' +
-                        '      <li ><a ng-click="grid.appScope.showVipPointRecord(row.entity)">积分记录</a></li>' +
-                        '      <li ><a ng-click="grid.appScope.sendCoupon(row.entity)">赠送优惠券</a></li>' +
-                        '      <li ><a ng-click="grid.appScope.showVipCoupon(row.entity)">查看优惠券</a></li>' +
+                        '      <li ><a ng-click="grid.appScope.changePoint(row.entity)">删除</a></li>' +
                         '    </ul>' +
                         '  </div>' +
                         '</div>'
                     },
                     {
-                        name: app.localize('VipCode'),
-                        field: 'vipCode',
-                        minWidth: 100
+                        name: "优惠券名称",
+                        field: 'couponName',
+                        cellTemplate:
+                        '<div class=\"ui-grid-cell-contents\">' +
+                        '  <img ng-src="{{row.entity.profilePictureId}}" width="22" height="22" class="img-rounded img-profile-picture-in-grid" />' +
+                        '  {{COL_FIELD CUSTOM_FILTERS}} &nbsp;' +
+                        '</div>',
+                        minWidth: 140
                     },
                     {
-                        name: app.localize('NickName'),
-                        field: 'vipName',
+                        name: "剩余数量",
+                        field: 'couponNum',
                         minWidth: 200
                     },
                     {
-                        name: app.localize('Sex'),
-                        field: 'vipSex',
+                        name: "兑换积分",
+                        field: 'couponPoint',
                         cellTemplate:
                         '<div class=\"ui-grid-cell-contents\">' +
-                        '  <span ng-show="row.entity.vipSex==0">女</span>' +
-                        '  <span ng-show="row.entity.vipSex==1">男</span>' +
+                        '  <span class="label label-success">{{row.entity.couponPoint}}</span>' +
                         '</div>',
                         minWidth: 40
                     },
@@ -118,117 +117,23 @@
                 data: []
             };
 
-            vm.getVipList = function () {
+            vm.getCouponConfigList = function () {
                 vm.loading = true;
-                vipService.getVipList($.extend({ filter: vm.filterText }, vm.requestParams))
+                couponService.getCouponConfigList($.extend({ filter: vm.filterText }, vm.requestParams))
                     .then(function (result) {
-                        vm.vipGridOptions.totalItems = result.data.totalCount;
-                        vm.vipGridOptions.data = addRoleNamesField(result.data.items);
+                        vm.couponConfigGridOptions.totalItems = result.data.totalCount;
+                        vm.couponConfigGridOptions.data = result.data.items;
                     }).finally(function () {
                         vm.loading = false;
                     });
             };
 
-            function addRoleNamesField(users) {
-                for (var i = 0; i < users.length; i++) {
-                    var user = users[i];
-                    user.getRoleNames = function () {
-                        var roleNames = '';
-                        for (var j = 0; j < this.roles.length; j++) {
-                            if (roleNames.length) {
-                                roleNames = roleNames + ', ';
-                            }
-                            roleNames = roleNames + this.roles[j].roleName;
-                        };
-
-                        return roleNames;
-                    }
-                }
-                return users;
-            }
-
-            vm.ocDisableVip = function (vip) {
-                vipService.ocDisableVip({
+            vm.deleteCoupon = function (vip) {
+                couponService.deleteCoupon({
                     id: vip.id
                 }).then(function (result) {
                     vm.getVipList();
                     abp.notify.success("操作成功！");
-                });
-            }
-
-            vm.changePoint = function (vip) {
-                var modalInstance = $uibModal.open({
-                    templateUrl: '~/App/CRM/vipManage/changePointModal.cshtml',
-                    controller: 'crm.vipManage.changePointModal as vm',
-                    backdrop: 'static',
-                    resolve: {
-                        vipInfo: function () {
-                            return {
-                                vipId: vip.id,
-                                vipName: vip.vipName,
-                                vipPoint: vip.vipPoint
-                            };
-                        }
-                    }
-                });
-
-                modalInstance.result.then(function (result) {
-                    vm.getVipList();
-                });
-            }
-
-            vm.showVipPointRecord = function (vip) {
-                $uibModal.open({
-                    templateUrl: '~/App/CRM/vipManage/showVipPointRecordModal.cshtml',
-                    controller: 'crm.vipManage.showVipPointRecordModal as vm',
-                    backdrop: 'static',
-                    size: 'lg',
-                    resolve: {
-                        vipInfo: function () {
-                            return {
-                                vipId: vip.id,
-                                vipName: vip.vipName
-                            };
-                        }
-                    }
-                });
-            }
-
-            vm.sendCoupon = function (vip) {
-                var modalInstance = $uibModal.open({
-                    templateUrl: '~/App/CRM/vipManage/sendCouponModal.cshtml',
-                    controller: 'crm.vipManage.sendCouponModal as vm',
-                    backdrop: 'static',
-                    resolve: {
-                        vipInfo: function () {
-                            return {
-                                vipId: vip.id,
-                                vipName: vip.vipName,
-                                vipPoint: vip.vipPoint
-                            };
-                        }
-                    }
-                });
-
-                modalInstance.result.then(function (result) {
-                    vm.getVipList();
-                });
-            }
-
-            vm.showVipCoupon = function (vip) {
-                $uibModal.open({
-                    templateUrl: '~/App/CRM/vipManage/showVipCouponModal.cshtml',
-                    controller: 'crm.vipManage.showVipCouponModal as vm',
-                    backdrop: 'static',
-                    size: 'lg',
-                    resolve: {
-                        vipInfo: function () {
-                            return {
-                                vipId: vip.id,
-                                vipName: vip.vipName
-                            };
-                        }
-                    }
                 });
             }
 
@@ -238,14 +143,7 @@
                 });
             }
 
-            vm.exportToExcel = function () {
-                vipService.getUsersToExcel({})
-                    .then(function (result) {
-                        app.downloadTempFile(result.data);
-                    });
-            };
-
-            //vm.getVipList();
+            vm.getCouponConfigList();
 
         }]);
 })();

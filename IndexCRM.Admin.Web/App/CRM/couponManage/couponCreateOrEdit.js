@@ -16,25 +16,38 @@
                     abp.notify.warn("请上传图片！");
                 }
                 if (vm.couponConfig.validityMode == 1) {
-                    if (vm.couponConfig.startTime != "" && vm.couponConfig.endTime != "") {
+                    if (vm.couponConfig.startTime == "" && vm.couponConfig.endTime == "") {
                         abp.notify.warn("请填写有效期！");
+                        return;
+                    }
+                    if (vm.couponConfig.startTime >= vm.couponConfig.endTime) {
+                        abp.notify.warn("开始时间不能大于结束时间！");
+                        return;
                     }
                 }
                 if (vm.couponConfig.validityMode == 2) {
-                    if (vm.couponConfig.effectDate != "" && vm.couponConfig.validDate != "") {
+                    if (vm.couponConfig.effectDate == "" && vm.couponConfig.validDate == "") {
                         abp.notify.warn("请填写有效期！");
+                    }
+                    if (vm.couponConfig.validDate <= 0) {
+                        abp.notify.warn("有效期不能小于等于0！");
+                        return;
+                    }
+                    if (vm.couponConfig.effectDate < 0) {
+                        abp.notify.warn("生效日不能小于0！");
+                        return;
                     }
                 }
 
-                //vm.saving = true;
-                //couponService.createOrUpdateUser({
-                //    user: vm.user
-                //}).then(function () {
-                //    abp.notify.info(app.localize('SavedSuccessfully'));
-                //vm.back();
-                //}).finally(function () {
-                //    vm.saving = false;
-                //});
+                vm.saving = true;
+                couponService.createOrUpdateCoupon({
+                    couponConfig: vm.couponConfig
+                }).then(function () {
+                    abp.notify.info("创建成功！");
+                    vm.back();
+                }).finally(function () {
+                    vm.saving = false;
+                });
             };
 
             vm.back = function () {
@@ -56,6 +69,7 @@
                 });
 
                 modalInstance.result.then(function (result) {
+                    console.log(result);
                     vm.couponImg = result;
                 });
             };

@@ -157,7 +157,7 @@ namespace IndexCRM.Admin.Authorization.Users.Profile
             }
             
             FileHelper.DeleteIfExists(tempProfilePicturePath);
-            return CreateImageFromBytes(Guid.NewGuid().ToString(), byteArray);
+            return CreateImageFromBytes(Guid.NewGuid().ToString().ToUpper(), byteArray);
         }
 
         private string CreateImageFromBytes(string fileName, byte[] buffer)

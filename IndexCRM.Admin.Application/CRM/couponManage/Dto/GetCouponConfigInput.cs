@@ -7,6 +7,8 @@ namespace IndexCRM.Admin.CRM.couponManage.Dto
     {
         public string CouponConfigId { get; set; }
 
+        public string Filter { get; set; }
+
         public void Normalize()
         {
             if (string.IsNullOrEmpty(Sorting))

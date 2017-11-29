@@ -14,6 +14,7 @@ using IndexCRM.Admin.CRM.couponManage.Dto;
 using IndexCRM.Admin.Function;
 using System.Linq.Dynamic;
 using Abp.Linq.Extensions;
+using Abp.Extensions;
 
 namespace IndexCRM.Admin.CRM.couponManage
 {
@@ -95,7 +96,7 @@ namespace IndexCRM.Admin.CRM.couponManage
         public async Task<PagedResultDto<VipCouponListDto>> GetVipCouponList(GetVipCouponInput input)
         {
             var vipCoupon = _couponRepository.GetAll()
-                .Where(u => u.VipId == input.VipId&&u.EndTime>DateTime.Now);
+                .Where(u => u.VipId == input.VipId && u.EndTime > DateTime.Now);
 
             var query = from v in vipCoupon
                         join c in _couponConfigRepository.GetAll() on v.CouponConfigId equals c.Id
@@ -130,27 +131,93 @@ namespace IndexCRM.Admin.CRM.couponManage
                 );
         }
 
-        public async Task<GetCouponConfigForEditOutput> GetCouponConfigForEdit(GetCouponConfigInput input)
+        public async Task<GetCouponConfigForEditDto> GetCouponConfigForEdit(GetCouponConfigInput input)
         {
             if (string.IsNullOrEmpty(input.CouponConfigId))
             {
                 //Creating a new coupon
-                var couponConfigDto = new GetCouponConfigForEditOutput();
+                var couponConfigDto = new GetCouponConfigForEditDto();
 
                 return couponConfigDto;
             }
             else
             {
                 //Editing an existing coupon
-                var couponConfig = _couponConfigRepository.FirstOrDefault(u => u.Id==input.CouponConfigId);
+                var couponConfig = _couponConfigRepository.FirstOrDefault(u => u.Id == input.CouponConfigId);
 
-                var couponConfigDto = couponConfig.MapTo<GetCouponConfigForEditOutput>();
+                var couponConfigDto = couponConfig.MapTo<GetCouponConfigForEditDto>();
 
                 return couponConfigDto;
             }
 
-           
+
         }
-        
+
+        public async Task CreateOrUpdateCoupon(GetCouponConfigForEditInput input)
+        {
+            if (string.IsNullOrEmpty(input.CouponConfig.Id))
+            {
+                await CreateCouponAsync(input);
+            }
+            else
+            {
+                await UpdateCouponAsync(input);
+            }
+        }
+
+        protected virtual async Task UpdateCouponAsync(GetCouponConfigForEditInput input)
+        {
+            var couponConfig = await _couponConfigRepository.FirstOrDefaultAsync(u => u.Id == input.CouponConfig.Id);
+
+            //Update user properties
+            input.CouponConfig.MapTo(couponConfig); //Passwords is not mapped (see mapping configuration)
+            couponConfig.ModifyMan = AsyncHelper.RunSync(() => UserManager.GetUserByIdAsync((long)AbpSession.UserId)).Name;
+            couponConfig.ModifyTime = DateTime.Now;
+
+            await _couponConfigRepository.UpdateAsync(couponConfig);
+            await CurrentUnitOfWork.SaveChangesAsync();
+        }
+
+        protected virtual async Task CreateCouponAsync(GetCouponConfigForEditInput input)
+        {
+            var couponConfig = input.CouponConfig.MapTo<CouponConfig>();
+
+            couponConfig.Id = Guid.NewGuid().ToString().ToUpper();
+            couponConfig.IsDelete = false;
+            couponConfig.AddMan = AsyncHelper.RunSync(() => UserManager.GetUserByIdAsync((long)AbpSession.UserId)).Name;
+            couponConfig.AddTime = DateTime.Now;
+            couponConfig.ModifyMan = AsyncHelper.RunSync(() => UserManager.GetUserByIdAsync((long)AbpSession.UserId)).Name;
+            couponConfig.ModifyTime = DateTime.Now;
+
+            await _couponConfigRepository.InsertAsync(couponConfig);
+            await CurrentUnitOfWork.SaveChangesAsync();
+        }
+
+        public async Task<PagedResultDto<GetCouponConfigForEditDto>> GetCouponConfigList(GetCouponConfigInput input)
+        {
+            var couponConfig = _couponConfigRepository.GetAll()
+                .Where(u => u.IsDelete == false)
+                .WhereIf(!input.Filter.IsNullOrWhiteSpace(), u => u.CouponName == input.Filter);
+
+            var couponConfigCount = await couponConfig.CountAsync();
+            var couponConfigList = await couponConfig
+                .OrderBy(input.Sorting)
+                .PageBy(input)
+                .ToListAsync();
+
+            foreach (var item in couponConfigList)
+            {
+                if (item.CouponNum != 0)
+                {
+                    item.CouponNum = item.CouponNum - _couponConfigRepository.Count(a => a.Id == item.Id);
+                }
+            }
+            var couponConfigListDto = couponConfigList.MapTo<List<GetCouponConfigForEditDto>>();
+
+            return new PagedResultDto<GetCouponConfigForEditDto>(
+                couponConfigCount,
+                couponConfigListDto
+                );
+        }
     }
 }
