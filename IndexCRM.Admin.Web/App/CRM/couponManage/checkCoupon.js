@@ -1,157 +1,131 @@
 ﻿(function () {
-    appModule.controller('crm.couponManage.couponCreateOrEdit', [
-        '$scope', '$state', '$stateParams', '$uibModal', 'abp.services.app.coupon',
-        function ($scope, $state, $stateParams, $uibModal, couponService) {
+    appModule.controller('crm.couponManage.checkCoupon', [
+        '$scope', '$state', '$stateParams', '$timeout', '$uibModal', 'uiGridConstants', 'abp.services.app.coupon',
+        function ($scope, $state, $stateParams, $timeout, $uibModal, uiGridConstants, couponService) {
             var vm = this;
             vm.loading = false;
+            vm.couponCode = "";
 
+            vm.requestParams = {
+                permission: '',
+                role: '',
+                skipCount: 0,
+                maxResultCount: app.consts.grid.defaultPageSize,
+                sorting: null
+            };
 
-            vm.couponConfig = null;
-            vm.couponConfigId = $stateParams.couponConfigId;
-            vm.couponImg = "";
+            vm.checkCouponGridOptions = {
+                enableHorizontalScrollbar: uiGridConstants.scrollbars.WHEN_NEEDED,
+                enableVerticalScrollbar: uiGridConstants.scrollbars.WHEN_NEEDED,
+                paginationPageSizes: app.consts.grid.defaultPageSizes,
+                paginationPageSize: app.consts.grid.defaultPageSize,
+                useExternalPagination: true,
+                useExternalSorting: true,
+                enableSorting: false,
+                appScopeProvider: vm,
+                rowTemplate: '<div ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell" ng-class="{ \'ui-grid-row-header-cell\': col.isRowHeader, \'text-muted\': !row.entity.isActive }"  ui-grid-cell></div>',
+                columnDefs: [
+                    {
+                        name: "券号",
+                        field: 'couponCode',
+                        minWidth: 80
+                    },
+                    {
+                        name: "券名",
+                        field: 'couponName',
+                        minWidth: 140
+                    },
+                    {
+                        name: "有效期",
+                        cellTemplate:
+                        '<div class=\"ui-grid-cell-contents\">' +
+                        '  <span>{{row.entity.startTime.substring(0, 10)}} 至 {{row.entity.endTime.substring(0, 10)}}</span>' +
+                        '</div>',
+                        minWidth: 200
+                    },
+                    {
+                        name: "是否使用",
+                        field: 'isUse',
+                        cellTemplate:
+                        '<div class=\"ui-grid-cell-contents\">' +
+                        '  <span ng-show="row.entity.isUse" class="label label-danger">已使用</span>' +
+                        '  <span ng-show="!row.entity.isUse" class="label label-success">未使用</span>' +
+                        '</div>',
+                        minWidth: 40
+                    },
+                    {
+                        name: "核销人",
+                        cellTemplate:
+                        '<div class=\"ui-grid-cell-contents\">' +
+                        '  <span ng-show="row.entity.isUse">{{row.entity.modifyMan}}</span>' +
+                        '</div>',
+                        minWidth: 40
+                    },
+                    {
+                        name: "核销时间",
+                        cellTemplate:
+                        '<div class=\"ui-grid-cell-contents\">' +
+                        '  <span ng-show="row.entity.isUse">{{row.entity.modifyTime.substring(0, 19).replace("T"," ")}}</span>' +
+                        '</div>',
+                        minWidth: 160
+                    }
+                ],
+                data: []
+            };
 
-            vm.save = function () {
-                console.log(vm.couponConfig.startTime + "--" + vm.couponConfig.startTime);
-                vm.couponConfig.couponImg = vm.couponImg;
-                if (vm.couponConfig.couponImg == "") {
-                    abp.notify.warn("请上传图片！");
+            vm.getCheckCouponList = function () {
+                document.getElementById("CouponCode").focus();
+                vm.couponCode = "";
+                vm.loading = true;
+                couponService.getCheckCouponList($.extend({ filter: "" }, vm.requestParams))
+                    .then(function (result) {
+                        vm.checkCouponGridOptions.totalItems = result.data.totalCount;
+                        vm.checkCouponGridOptions.data = result.data.items;
+                    }).finally(function () {
+                        vm.loading = false;
+                    });
+            };
+
+            vm.onEnter = function (e) {
+                var keycode = window.event ? e.keyCode : e.which;
+                if (keycode == 13) {
+                    vm.checkCoupon();
+                }
+            };
+
+            vm.checkCoupon = function () {
+
+                if (vm.couponCode == "") {
+                    abp.notify.warn("请填写券号！");
                     return;
                 }
-                if (vm.couponConfig.validityMode == 1) {
-                    if (vm.couponConfig.startTime == null || vm.couponConfig.endTime == null) {
-                        abp.notify.warn("请填写有效期！");
-                        return;
-                    }
-                    if (vm.couponConfig.startTime >= vm.couponConfig.endTime) {
-                        abp.notify.warn("开始时间不能大于结束时间！");
-                        return;
-                    }
-                }
-                if (vm.couponConfig.validityMode == 2) {
-                    if (vm.couponConfig.effectDate == "" && vm.couponConfig.validDate == "") {
-                        abp.notify.warn("请填写有效期！");
-                    }
-                    if (vm.couponConfig.validDate <= 0) {
-                        abp.notify.warn("有效期不能小于等于0！");
-                        return;
-                    }
-                    if (vm.couponConfig.effectDate < 0) {
-                        abp.notify.warn("生效日不能小于0！");
-                        return;
-                    }
-                }
-                if (vm.couponConfig.couponName == null || vm.couponConfig.couponPoint == null
-                    || vm.couponConfig.couponNum == null || vm.couponConfig.couponExplain == null) {
-                    abp.notify.warn("请完善信息！");
-                    return;
-                }
 
-                vm.saving = true;
-                couponService.createOrUpdateCoupon({
-                    couponConfig: vm.couponConfig
-                }).then(function () {
-                    if (vm.couponConfigId == "") {
-                        abp.notify.info("创建成功！");
-                    }
-                    else {
-                        abp.notify.info("修改成功！");    
-                    }
-                    
-                    vm.back();
-                }).finally(function () {
-                    vm.saving = false;
-                });
-            };
-
-            vm.back = function () {
-                $state.go('couponManage', {
-
-                });
-            };
-
-            vm.changePicture = function () {
-                var modalInstance = $uibModal.open({
-                    templateUrl: '~/App/CRM/couponManage/changePicture.cshtml',
-                    controller: 'crm.couponManage.changePicture as vm',
-                    backdrop: 'static',
-                    resolve: {
-                        couponImg: function () {
-                            return vm.couponImg;
-                        }
-                    }
-                });
-
-                modalInstance.result.then(function (result) {
-                    console.log(result);
-                    vm.couponImg = result;
-                });
-            };
-
-            function init() {
-                couponService.getCouponConfigForEdit({
-                    CouponConfigId: vm.couponConfigId
+                couponService.getCheckCouponName({
+                    CouponCode: vm.couponCode
                 }).then(function (result) {
-                    vm.couponConfig = result.data;
-                    if (result.data.id != null) {
-                        vm.couponConfig.startTime = vm.couponConfig.startTime.replace("T", " ").substr(0, 16);
-                        vm.couponConfig.endTime = vm.couponConfig.endTime.replace("T", " ").substr(0, 16);
-                        vm.couponConfig.isShow = vm.couponConfig.isShow + "";
-                        vm.couponImg = vm.couponConfig.couponImg;
-                    }
-                    else {
-                        vm.couponConfig.validityMode = "1";
-                        vm.couponConfig.isShow = "true";
-                        vm.couponConfig.couponExplain = "1.shdksaj\r\n2.sadas";
-                    }
+                    abp.message.confirm(
+                        abp.utils.formatString("核销优惠券\n\r\n\r{0}", result.data),
+                        function (isConfirmed) {
+                            $timeout(function () {
+                                if (isConfirmed) {
+                                    vm.saving = true;
+                                    couponService.checkCoupon({
+                                        CouponCode: vm.couponCode
+                                    }).then(function () {
+                                        abp.notify.success("操作成功");
+                                    }).finally(function () {
+                                        vm.getCheckCouponList();
+                                    });
+                                }
+                            }, 200);
+                        }
+                    );
                 });
-            }
 
-            init();
 
-            $("#StartTime").daterangepicker({
-                singleDatePicker: true,
-                showDropdowns: true,
-                autoUpdateInput: true,
-                timePicker24Hour: true,
-                timePicker: true,
-                minDate: new Date().getFullYear() + '-01-01',
-                maxDate: new Date().getFullYear() + 20 + '-12-31',
-                "locale": {
-                    format: 'YYYY-MM-DD HH:mm',
-                    applyLabel: "应用",
-                    cancelLabel: "取消",
-                }
-            }, function (start, end, label) {
-                beginTimeTake = start;
-                if (!this.startDate) {
-                    this.element.val('');
-                } else {
-                    this.element.val(this.startDate.format(this.locale.format));
-                }
-            });
+            };
 
-            $("#EndTime").daterangepicker({
-                singleDatePicker: true,
-                showDropdowns: true,
-                autoUpdateInput: true,
-                timePicker24Hour: true,
-                timePicker: true,
-                minDate: new Date().getFullYear() + '-01-01',
-                maxDate: new Date().getFullYear() + 20 + '-12-31',
-                "locale": {
-                    format: 'YYYY-MM-DD HH:mm',
-                    applyLabel: "应用",
-                    cancelLabel: "取消",
-                }
-            }, function (start, end, label) {
-                beginTimeTake = start;
-                if (!this.startDate) {
-                    this.element.val('');
-                } else {
-                    this.element.val(this.startDate.format(this.locale.format));
-                }
-            });
-
+            vm.getCheckCouponList();
 
         }
     ]);

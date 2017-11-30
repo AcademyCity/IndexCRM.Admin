@@ -24,6 +24,8 @@ namespace IndexCRM.Admin.CRM.couponManage.Dto
 
         public bool? IsUse { get; set; }
 
+        public bool? IsValidity { get; set; }
+
         public DateTime? ModifyTime { get; set; }
 
         public string ModifyMan { get; set; }

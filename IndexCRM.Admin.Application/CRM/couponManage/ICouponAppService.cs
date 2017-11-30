@@ -21,5 +21,11 @@ namespace IndexCRM.Admin.CRM.couponManage
         Task<PagedResultDto<GetCouponConfigForEditDto>> GetCouponConfigList(GetCouponConfigInput input);
 
         Task DeleteCouponConfig(GetCouponConfigInput input);
+
+        Task CheckCoupon(GetVipCouponInput input);
+
+        Task<PagedResultDto<VipCouponListDto>> GetCheckCouponList(GetVipCouponInput input);
+
+        Task<string> GetCheckCouponName(GetVipCouponInput input);
     }
 }

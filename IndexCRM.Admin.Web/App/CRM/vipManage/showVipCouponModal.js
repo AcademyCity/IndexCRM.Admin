@@ -10,7 +10,7 @@
             vm.vipId = vipInfo.vipId;
             vm.vipName = vipInfo.vipName;
 
-            vm.vipPointRecordGridOptions = {
+            vm.vipCouponRecordGridOptions = {
                 enableHorizontalScrollbar: uiGridConstants.scrollbars.WHEN_NEEDED,
                 enableVerticalScrollbar: uiGridConstants.scrollbars.WHEN_NEEDED,
                 paginationPageSizes: app.consts.grid.defaultPageSizes,
@@ -24,12 +24,12 @@
                     {
                         name: "券号",
                         field: 'couponCode',
-                        minWidth: 80
+                        minWidth: 120
                     },
                     {
                         name: "券名",
                         field: 'couponName',
-                        minWidth: 140
+                        minWidth: 150
                     },
                     {
                         name: "有效期",
@@ -37,7 +37,17 @@
                             '<div class=\"ui-grid-cell-contents\">' +
                             '  <span>{{row.entity.startTime.substring(0, 10)}} 至 {{row.entity.endTime.substring(0, 10)}}</span>' +
                             '</div>',
-                        minWidth: 200
+                        minWidth: 190
+                    },
+                    {
+                        name: "是否过期",
+                        field: 'isValidity',
+                        cellTemplate:
+                        '<div class=\"ui-grid-cell-contents\">' +
+                        '  <span ng-show="!row.entity.isValidity" class="label label-danger">已过期</span>' +
+                        '  <span ng-show="row.entity.isValidity" class="label label-success">未过期</span>' +
+                        '</div>',
+                        maxWidth: 100
                     },
                     {
                         name: "是否使用",
@@ -47,7 +57,7 @@
                             '  <span ng-show="row.entity.isUse" class="label label-danger">已使用</span>' +
                             '  <span ng-show="!row.entity.isUse" class="label label-success">未使用</span>' +
                             '</div>',
-                        minWidth: 40
+                        maxWidth: 100
                     },
                     {
                         name: "核销人",
@@ -55,7 +65,7 @@
                             '<div class=\"ui-grid-cell-contents\">' +
                             '  <span ng-show="row.entity.isUse">{{row.entity.modifyMan}}</span>' +
                             '</div>',
-                        minWidth: 40
+                        maxWidth: 80
                     },
                     {
                         name: "核销时间",
@@ -78,8 +88,8 @@
                 couponService.getVipCouponList({
                     vipId: vm.vipId
                     }).then(function (result) {
-                        vm.vipPointRecordGridOptions.totalItems = result.data.totalCount;
-                        vm.vipPointRecordGridOptions.data = result.data.items;
+                        vm.vipCouponRecordGridOptions.totalItems = result.data.totalCount;
+                        vm.vipCouponRecordGridOptions.data = result.data.items;
                     }).finally(function () {
                         vm.loading = false;
                     });

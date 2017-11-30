@@ -7,6 +7,8 @@ namespace IndexCRM.Admin.CRM.couponManage.Dto
     {
         public string VipId { get; set; }
 
+        public string CouponCode { get; set; }
+
         public void Normalize()
         {
             if (string.IsNullOrEmpty(Sorting))

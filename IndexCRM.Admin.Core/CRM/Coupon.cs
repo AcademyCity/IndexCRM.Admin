@@ -36,7 +36,7 @@ namespace IndexCRM.Admin.CRM
         [StringLength(32)]
         public string AddExplain { get; set; }
 
-        public bool? IsUse { get; set; }
+        public bool IsUse { get; set; }
 
         public DateTime? ModifyTime { get; set; }
 

@@ -96,7 +96,7 @@ namespace IndexCRM.Admin.CRM.couponManage
         public async Task<PagedResultDto<VipCouponListDto>> GetVipCouponList(GetVipCouponInput input)
         {
             var vipCoupon = _couponRepository.GetAll()
-                .Where(u => u.VipId == input.VipId && u.EndTime > DateTime.Now);
+                .Where(u => u.VipId == input.VipId);
 
             var query = from v in vipCoupon
                         join c in _couponConfigRepository.GetAll() on v.CouponConfigId equals c.Id
@@ -124,6 +124,18 @@ namespace IndexCRM.Admin.CRM.couponManage
                         .FirstOrDefault();
                 return dto;
             }).ToList();
+
+            foreach (var item in vipCouponListDto)
+            {
+                if (item.EndTime >= DateTime.Now)
+                {
+                    item.IsValidity = true;
+                }
+                else
+                {
+                    item.IsValidity = false;
+                }
+            }
 
             return new PagedResultDto<VipCouponListDto>(
                 vipCouponCount,
@@ -226,6 +238,83 @@ namespace IndexCRM.Admin.CRM.couponManage
             couponConfig.IsDelete = true;
             await _couponConfigRepository.UpdateAsync(couponConfig);
 
+        }
+
+        public async Task<string> GetCheckCouponName(GetVipCouponInput input)
+        {
+            var vipCoupon = _couponRepository.FirstOrDefault(u => u.CouponCode == input.CouponCode);
+            if (vipCoupon != null)
+            {
+                if (vipCoupon.IsUse)
+                {
+                    throw new UserFriendlyException("优惠券已核销");
+                }
+                else
+                {
+                    if (vipCoupon.EndTime<=DateTime.Now)
+                    {
+                        throw new UserFriendlyException("优惠券已过期");
+                    }
+                    else
+                    {
+                        return _couponConfigRepository.FirstOrDefault(u => u.Id == vipCoupon.CouponConfigId).CouponName;
+                    } 
+                }
+            }
+            else
+            {
+                throw new UserFriendlyException("优惠券不存在");
+            }
+        }
+
+        public async Task CheckCoupon(GetVipCouponInput input)
+        {
+            //Editing an existing coupon
+            var vipCoupon = _couponRepository.FirstOrDefault(u => u.CouponCode == input.CouponCode);
+            vipCoupon.IsUse = true;
+            vipCoupon.ModifyMan = AsyncHelper.RunSync(() => UserManager.GetUserByIdAsync((long)AbpSession.UserId)).Name;
+            vipCoupon.ModifyTime = DateTime.Now;
+            await _couponRepository.UpdateAsync(vipCoupon);
+
+        }
+
+        public async Task<PagedResultDto<VipCouponListDto>> GetCheckCouponList(GetVipCouponInput input)
+        {
+            var modifyMan = AsyncHelper.RunSync(() => UserManager.GetUserByIdAsync((long)AbpSession.UserId)).Name;
+            var vipCoupon = _couponRepository.GetAll()
+                .Where(u => u.IsUse  && u.ModifyMan == modifyMan && u.ModifyTime.Value >= DbFunctions.TruncateTime(DateTime.Now));
+
+            var query = from v in vipCoupon
+                        join c in _couponConfigRepository.GetAll() on v.CouponConfigId equals c.Id
+                        select new
+                        {
+                            v,
+                            c = c == null ? null : new { c.Id, c.CouponName }
+                        };
+
+            var vipCouponCount = await query.CountAsync();
+            var vipCouponList = await query
+                .OrderBy(input.Sorting)
+                .PageBy(input)
+                .ToListAsync();
+
+            var vipCouponListDto = vipCouponList.Select(s => s.v).MapTo<List<VipCouponListDto>>();
+
+            vipCouponListDto = vipCouponListDto.Select(v =>
+            {
+                var dto = v;
+                dto.CouponName =
+                    vipCouponList.Select(s => s.c)
+                        .Where(w => w.Id == v.CouponConfigId)
+                        .Select(si => si.CouponName)
+                        .FirstOrDefault();
+                return dto;
+            }).ToList();
+
+            return new PagedResultDto<VipCouponListDto>(
+                vipCouponCount,
+                vipCouponListDto
+                );
         }
     }
 }
