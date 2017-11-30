@@ -1,0 +1,43 @@
+﻿@using IndexCRM.Admin.Localization
+<div ng-controller="crm.couponManage.couponCreateOrEdit as vm">
+    <div class="row margin-bottom-5">
+        <div class="col-xs-6">
+            <div class="page-head">
+                <div class="page-title">
+                    <h1>
+                        <span>核销优惠券</span>
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="portlet light bordered">
+                <div class="portlet-body form">
+                    <form role="form">
+                        <div class="form-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group form-md-line-input">
+                                        <input type="text" class="form-control" id="CouponCode" placeholder="" ng-model="vm.couponCode" required>
+                                        <label for="form_control_1" style="color:#000000;">券号</label>
+                                        <span class="help-block"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group form-md-line-input">
+                                        <button type="button" class="btn blue" ng-click="vm.changePicture()">核销</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div busy-if="vm.loading">
+                    <div ui-grid="vm.couponConfigGridOptions" ui-grid-pagination ui-grid-resize-columns dir=@(CultureHelper.IsRtl ? "rtl" : "")></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

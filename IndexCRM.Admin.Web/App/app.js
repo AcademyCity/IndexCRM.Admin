@@ -195,8 +195,14 @@ appModule.config([
                     templateUrl: '~/App/CRM/couponManage/couponCreateOrEdit.cshtml'
                 });
             }
+            
         }
-
+        if (abp.auth.hasPermission('CRM.CouponManage.CheckCoupon')) {
+            $stateProvider.state('checkCoupon', {
+                url: '/couponManage/checkCoupon',
+                templateUrl: '~/App/CRM/couponManage/checkCoupon.cshtml'
+            });
+        }
 
 
         //$qProvider settings
