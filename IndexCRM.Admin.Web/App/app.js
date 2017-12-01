@@ -203,6 +203,12 @@ appModule.config([
                 templateUrl: '~/App/CRM/couponManage/checkCoupon.cshtml'
             });
         }
+        if (abp.auth.hasPermission('CRM.VipManage.SendPoint')) {
+            $stateProvider.state('sendPoint', {
+                url: '/vipManage/sendPoint',
+                templateUrl: '~/App/CRM/vipManage/sendPoint.cshtml'
+            });
+        }
 
 
         //$qProvider settings

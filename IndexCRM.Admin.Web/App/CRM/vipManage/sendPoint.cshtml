@@ -1,0 +1,52 @@
+﻿@using IndexCRM.Admin.Localization
+<div ng-controller="crm.vipManage.sendPoint as vm">
+    <div class="row margin-bottom-5">
+        <div class="col-xs-6">
+            <div class="page-head">
+                <div class="page-title">
+                    <h1>
+                        <span>赠送积分</span>
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="portlet light bordered">
+                <div class="portlet-body form">
+                    <form role="form">
+                        <div class="form-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group form-md-line-input">
+                                        <input type="text" class="form-control" id="PointNum" placeholder="" ng-model="vm.amount" required>
+                                        <label for="form_control_1" style="color:#000000;">积分数量</label>
+                                        <span class="help-block"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group form-md-line-input">
+                                        <input type="text" class="form-control" placeholder="" ng-model="vm.vipCode" ng-keyup="vm.onEnter($event)" required>
+                                        <label for="form_control_1" style="color:#000000;">会员编号</label>
+                                        <span class="help-block"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group form-md-line-input">
+                                        <button type="button" class="btn blue" ng-click="vm.sendPoint()">赠送</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div busy-if="vm.loading">
+                    <div ui-grid="vm.sendPointGridOptions" ui-grid-pagination ui-grid-resize-columns dir=@(CultureHelper.IsRtl ? "rtl" : "" )></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

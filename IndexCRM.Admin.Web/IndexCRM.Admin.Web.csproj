@@ -512,6 +512,7 @@
     <Content Include="App\CRM\couponManage\checkCoupon.js" />
     <Content Include="App\CRM\couponManage\index.js" />
     <Content Include="App\CRM\couponManage\couponCreateOrEdit.js" />
+    <Content Include="App\CRM\vipManage\sendPoint.js" />
     <Content Include="App\CRM\vipManage\sendCouponModal.js" />
     <Content Include="App\CRM\vipManage\showVipCouponModal.js" />
     <Content Include="App\CRM\vipManage\showVipPointRecordModal.js" />
@@ -2251,6 +2252,7 @@
     <Content Include="App\CRM\couponManage\couponCreateOrEdit.cshtml" />
     <Content Include="App\CRM\couponManage\changePicture.cshtml" />
     <Content Include="App\CRM\couponManage\checkCoupon.cshtml" />
+    <Content Include="App\CRM\vipManage\sendPoint.cshtml" />
     <None Include="Properties\PublishProfiles\aspnetzero - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\xx.pubxml" />

@@ -497,10 +497,10 @@
     
     <text name="VipManage">会员管理</text>
     <text name="VipCode">会员号</text>
-
     <text name="CouponManage">优惠券管理</text>
     <text name="CreateCoupon">创建优惠券</text>
     <text name="CheckCoupon">核销优惠券</text>
+    <text name="SendPoint">赠送积分</text>
     
   </texts>
 </localizationDictionary>

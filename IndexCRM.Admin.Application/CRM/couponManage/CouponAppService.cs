@@ -282,7 +282,7 @@ namespace IndexCRM.Admin.CRM.couponManage
         {
             var modifyMan = AsyncHelper.RunSync(() => UserManager.GetUserByIdAsync((long)AbpSession.UserId)).Name;
             var vipCoupon = _couponRepository.GetAll()
-                .Where(u => u.IsUse  && u.ModifyMan == modifyMan && u.ModifyTime.Value >= DbFunctions.TruncateTime(DateTime.Now));
+                .Where(u => u.IsUse  && u.ModifyMan == modifyMan && u.ModifyTime >= DbFunctions.TruncateTime(DateTime.Now));
 
             var query = from v in vipCoupon
                         join c in _couponConfigRepository.GetAll() on v.CouponConfigId equals c.Id

@@ -62,6 +62,7 @@
         public const string Pages_Administration_Host_Settings = "Pages.Administration.Host.Settings";
 
         public const string CRM_VipManage = "CRM.VipManage";
+        public const string CRM_VipManage_SendPoint = "CRM.VipManage.SendPoint";
         public const string CRM_CouponManage = "CRM.CouponManage";
         public const string CRM_CouponManage_CreateCoupon = "CRM.CouponManage.CreateCoupon";
         public const string CRM_CouponManage_CheckCoupon = "CRM.CouponManage.CheckCoupon";

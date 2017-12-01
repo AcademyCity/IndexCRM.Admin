@@ -83,6 +83,7 @@ namespace IndexCRM.Admin.Authorization
             //administration.CreateChildPermission(AppPermissions.Pages_Administration_HangfireDashboard, L("HangfireDashboard"), multiTenancySides: _isMultiTenancyEnabled ? MultiTenancySides.Host : MultiTenancySides.Tenant);
 
             var vipManage = pages.CreateChildPermission(AppPermissions.CRM_VipManage, L("VipManage"));
+            vipManage.CreateChildPermission(AppPermissions.CRM_VipManage_SendPoint, L("SendPoint"));
 
             var couponManage = pages.CreateChildPermission(AppPermissions.CRM_CouponManage, L("CouponManage"));
             couponManage.CreateChildPermission(AppPermissions.CRM_CouponManage_CreateCoupon, L("CreateCoupon"));

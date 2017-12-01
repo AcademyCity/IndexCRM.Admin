@@ -120,6 +120,13 @@ namespace IndexCRM.Admin.Web.App.Startup
                     icon: "icon-home",
                     requiredPermissionName: AppPermissions.CRM_CouponManage_CheckCoupon
                     )
+                ).AddItem(new MenuItemDefinition(
+                    AppPermissions.CRM_VipManage_SendPoint,
+                    L("SendPoint"),
+                    url: "sendPoint",
+                    icon: "icon-home",
+                    requiredPermissionName: AppPermissions.CRM_VipManage_SendPoint
+                    )
                 );
         }
 

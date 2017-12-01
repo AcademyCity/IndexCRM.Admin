@@ -9,7 +9,7 @@ using IndexCRM.Admin.Authorization.Users;
 
 namespace IndexCRM.Admin.CRM.pointManage.Dto
 {
-    [AutoMapFrom(typeof(PointRecord))]
+    [AutoMap(typeof(PointRecord))]
     public class VipPointRecordListDto : EntityDto<string>
     {
         public int? PointChange { get; set; }
@@ -21,5 +21,9 @@ namespace IndexCRM.Admin.CRM.pointManage.Dto
         public DateTime? AddTime { get; set; }
 
         public string AddMan { get; set; }
+
+        public string VipCode { get; set; }
+
+        public string VipId { get; set; }
     }
 }

@@ -10,5 +10,9 @@ namespace IndexCRM.Admin.CRM.pointManage
         Task<PagedResultDto<VipPointRecordListDto>> GetVipPointRecordList(GetVipPointRecordInput input);
 
         Task ChangePoint(ChangePointInput input);
+
+        Task SendPoint(ChangePointInput input);
+
+        Task<PagedResultDto<VipPointRecordListDto>> GetSendPointRecordList(GetVipPointRecordInput input);
     }
 }
