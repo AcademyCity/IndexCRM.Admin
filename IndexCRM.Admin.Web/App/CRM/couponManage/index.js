@@ -77,8 +77,8 @@
                         field: 'validityMode',
                         cellTemplate:
                         '<div class=\"ui-grid-cell-contents\">' +
-                        '  <span ng-show="row.entity.validityMode==1">定时</span>' +
-                        '  <span ng-show="row.entity.validityMode==2">时长</span>' +
+                        '  <span ng-show="row.entity.validityMode==1" class="label label-success">定时</span>' +
+                        '  <span ng-show="row.entity.validityMode==2" class="label label-warning">时长</span>' +
                         '</div>',
                         maxWidth: 100
                     },

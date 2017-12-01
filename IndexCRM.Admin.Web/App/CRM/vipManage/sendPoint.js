@@ -106,12 +106,14 @@
                         $timeout(function () {
                             if (isConfirmed) {
                                 vm.saving = true;
-                                pointService.changePoint({
+                                pointService.sendPoint({
                                     vipId: vm.vipCode,
                                     amount: vm.amount,
                                     explain: vm.Explain
                                 }).then(function () {
                                     abp.notify.success("操作成功");
+                                    vm.amount = null;
+                                    vm.vipCode = null;
                                 }).finally(function () {
                                     vm.getSendPointList();
                                 });

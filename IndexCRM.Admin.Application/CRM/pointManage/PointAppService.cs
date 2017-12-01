@@ -136,7 +136,7 @@ namespace IndexCRM.Admin.CRM.pointManage
 
             var vipPointRecordCount = await query.CountAsync();
             var vipPointRecordList = await query
-                .OrderBy(input.Sorting)
+                .OrderBy("v.AddTime DESC")
                 .PageBy(input)
                 .ToListAsync();
 

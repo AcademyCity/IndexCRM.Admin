@@ -113,6 +113,7 @@
                                         CouponCode: vm.couponCode
                                     }).then(function () {
                                         abp.notify.success("操作成功");
+                                        vm.couponCode = "";
                                     }).finally(function () {
                                         vm.getCheckCouponList();
                                     });
