@@ -1,0 +1,88 @@
+﻿@using IndexCRM.Admin.Localization
+<div ng-controller="crm.storeManage.storeCreateOrEdit as vm">
+    <div class="row margin-bottom-5">
+        <div class="col-xs-6">
+            <div class="page-head">
+                <div class="page-title">
+                    <h1>
+                        <span ng-show="vm.storeId == ''">创建门店</span>
+                        <span ng-show="vm.storeId != ''">修改门店</span>
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="portlet light bordered">
+                <div class="portlet-body form">
+                    <form role="form">
+                        <div class="form-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group form-md-line-input">
+                                        <input type="text" class="form-control" id="form_control_1" placeholder="" ng-model="vm.store.storeName" required>
+                                        <label for="form_control_1" style="color:#000000;">店名</label>
+                                        <span class="help-block">必填</span>
+                                    </div>
+                                    <div class="form-group form-md-line-input">
+                                        <input type="text" class="form-control" id="form_control_1" placeholder="" ng-model="vm.store.storeNo" required>
+                                        <label for="form_control_1" style="color:#000000;">店号</label>
+                                        <span class="help-block">必填</span>
+                                    </div>
+                                    <div class="form-group form-md-line-input">
+                                        <input type="text" class="form-control" id="form_control_1" placeholder="" ng-model="vm.store.storePhone" required>
+                                        <label for="form_control_1" style="color:#000000;">门店电话</label>
+                                        <span class="help-block">必填</span>
+                                    </div>
+                                    <div class="form-group form-md-line-input">
+                                        <input type="text" class="form-control" id="form_control_1" placeholder="" ng-model="vm.store.storeAddr" required>
+                                        <label for="form_control_1" style="color:#000000;">门店地址</label>
+                                        <span class="help-block">必填</span>
+                                    </div>
+                                    <div class="form-group form-md-line-input">
+                                        <input type="text" class="form-control" id="form_control_1" placeholder="" ng-model="vm.store.storeLocation" required>
+                                        <label for="form_control_1" style="color:#000000;">门店坐标</label>
+                                        <span class="help-block">必填</span>
+                                    </div>
+                                    <div class="form-group form-md-line-input">
+                                        <input type="number" class="form-control" id="form_control_1" ng-model="vm.store.sort" placeholder="">
+                                        <label for="form_control_1" style="color:#000000;">门店排序</label>
+                                        <span class="help-block">可不填，正序显示</span>
+                                    </div>
+                                    <div class="form-group form-md-line-input">
+                                        <label for="form_control_1">是否显示门店</label>
+                                        <div class="md-radio-inline">
+                                            <div class="md-radio">
+                                                <input type="radio" id="radio3" name="radio1" class="md-radiobtn" ng-model="vm.store.isShow" value="true">
+                                                <label for="radio3">
+                                                    <span class="inc"></span>
+                                                    <span class="check"></span>
+                                                    <span class="box"></span>
+                                                    是
+                                                </label>
+                                            </div>
+                                            <div class="md-radio">
+                                                <input type="radio" id="radio4" name="radio1" class="md-radiobtn" ng-model="vm.store.isShow" value="false">
+                                                <label for="radio4">
+                                                    <span class="inc"></span>
+                                                    <span class="check"></span>
+                                                    <span class="box"></span>
+                                                    否
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-actions noborder">
+                                <button type="button" class="btn blue" ng-show="vm.storeId == ''" ng-click="vm.save()">创建</button>
+                                <button type="button" class="btn blue" ng-show="vm.storeId != ''" ng-click="vm.save()">修改</button>
+                                <button type="button" class="btn default" ng-click="vm.back()">返回</button>
+                            </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

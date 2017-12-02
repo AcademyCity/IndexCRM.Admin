@@ -172,6 +172,7 @@
     <Compile Include="Chat\NullChatCommunicator.cs" />
     <Compile Include="Configuration\AppSettingProvider.cs" />
     <Compile Include="Configuration\AppSettings.cs" />
+    <Compile Include="CRM\Store.cs" />
     <Compile Include="CRM\Coupon.cs" />
     <Compile Include="CRM\CouponConfig.cs" />
     <Compile Include="CRM\Point.cs" />
@@ -247,7 +248,9 @@
     <Content Include="Localization\Admin\READ_ME.txt" />
     <EmbeddedResource Include="Emailing\EmailTemplates\default.html" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

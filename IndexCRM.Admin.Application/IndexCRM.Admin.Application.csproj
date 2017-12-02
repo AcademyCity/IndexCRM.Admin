@@ -212,6 +212,12 @@
     <Compile Include="CRM\pointManage\Dto\VipPointRecordListDto.cs" />
     <Compile Include="CRM\pointManage\IPointAppService.cs" />
     <Compile Include="CRM\pointManage\PointAppService.cs" />
+    <Compile Include="CRM\storeManage\StoreAppService.cs" />
+    <Compile Include="CRM\storeManage\Dto\CouponConfigListDto.cs" />
+    <Compile Include="CRM\storeManage\Dto\GetStoreForEditDto.cs" />
+    <Compile Include="CRM\storeManage\Dto\GetStoreForEditInput.cs" />
+    <Compile Include="CRM\storeManage\Dto\GetStoreInput.cs" />
+    <Compile Include="CRM\storeManage\IStoreAppService.cs" />
     <Compile Include="CRM\vipManage\Dto\GetVipInput.cs" />
     <Compile Include="CRM\vipManage\Dto\VipListDto.cs" />
     <Compile Include="CRM\vipManage\Exporting\IVipListExcelExporter.cs" />
@@ -339,6 +345,7 @@
   <ItemGroup>
     <Folder Include="CRM\couponManage\Exporting\" />
     <Folder Include="CRM\pointManage\Exporting\" />
+    <Folder Include="CRM\storeManage\Exporting\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

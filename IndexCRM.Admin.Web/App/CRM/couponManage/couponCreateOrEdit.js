@@ -11,7 +11,6 @@
             vm.couponImg = "";
 
             vm.save = function () {
-                console.log(vm.couponConfig.startTime + "--" + vm.couponConfig.startTime);
                 vm.couponConfig.couponImg = vm.couponImg;
                 if (vm.couponConfig.couponImg == "") {
                     abp.notify.warn("请上传图片！");
@@ -82,7 +81,6 @@
                 });
 
                 modalInstance.result.then(function (result) {
-                    console.log(result);
                     vm.couponImg = result;
                 });
             };

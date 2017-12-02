@@ -501,6 +501,7 @@
     <text name="CreateCoupon">创建优惠券</text>
     <text name="CheckCoupon">核销优惠券</text>
     <text name="SendPoint">赠送积分</text>
+    <text name="StoreManage">门店管理</text>
     
   </texts>
 </localizationDictionary>

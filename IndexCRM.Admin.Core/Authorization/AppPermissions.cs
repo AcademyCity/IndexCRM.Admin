@@ -67,5 +67,6 @@
         public const string CRM_CouponManage_CreateCoupon = "CRM.CouponManage.CreateCoupon";
         public const string CRM_CouponManage_CheckCoupon = "CRM.CouponManage.CheckCoupon";
 
+        public const string CRM_StoreManage = "CRM.StoreManage";
     }
 }

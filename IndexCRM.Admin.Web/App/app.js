@@ -195,7 +195,7 @@ appModule.config([
                     templateUrl: '~/App/CRM/couponManage/couponCreateOrEdit.cshtml'
                 });
             }
-            
+
         }
         if (abp.auth.hasPermission('CRM.CouponManage.CheckCoupon')) {
             $stateProvider.state('checkCoupon', {
@@ -209,7 +209,19 @@ appModule.config([
                 templateUrl: '~/App/CRM/vipManage/sendPoint.cshtml'
             });
         }
+        if (abp.auth.hasPermission('CRM.StoreManage')) {
+            $stateProvider.state('storeManage', {
+                url: '/storeManage',
+                templateUrl: '~/App/CRM/storeManage/index.cshtml'
+            });
 
+            //if (abp.auth.hasPermission('CRM.StoreManage.CreateStore')) {
+            $stateProvider.state('createStore', {
+                url: '/storeManage/createStore/:storeId',
+                templateUrl: '~/App/CRM/storeManage/storeCreateOrEdit.cshtml'
+            });
+            //}
+        }
 
         //$qProvider settings
         $qProvider.errorOnUnhandledRejections(false);

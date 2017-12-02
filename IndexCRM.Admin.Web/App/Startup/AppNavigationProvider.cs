@@ -127,6 +127,13 @@ namespace IndexCRM.Admin.Web.App.Startup
                     icon: "icon-home",
                     requiredPermissionName: AppPermissions.CRM_VipManage_SendPoint
                     )
+                ).AddItem(new MenuItemDefinition(
+                    AppPermissions.CRM_StoreManage,
+                    L("StoreManage"),
+                    url: "storeManage",
+                    icon: "icon-home",
+                    requiredPermissionName: AppPermissions.CRM_StoreManage
+                    )
                 );
         }
 

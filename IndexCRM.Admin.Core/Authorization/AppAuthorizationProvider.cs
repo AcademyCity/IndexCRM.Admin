@@ -89,6 +89,8 @@ namespace IndexCRM.Admin.Authorization
             couponManage.CreateChildPermission(AppPermissions.CRM_CouponManage_CreateCoupon, L("CreateCoupon"));
             couponManage.CreateChildPermission(AppPermissions.CRM_CouponManage_CheckCoupon, L("CheckCoupon"));
 
+            var storeManage = pages.CreateChildPermission(AppPermissions.CRM_StoreManage, L("StoreManage"));
+
         }
 
         private static ILocalizableString L(string name)
